@@ -1,5 +1,6 @@
 from root import Window
 
 
-game = Window()
-game.run()
+if __name__ == "__main__":
+    game = Window()
+    game.run()

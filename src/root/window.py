@@ -8,21 +8,34 @@ class Window:
 
     def __init__(self):
         self.running = False
-        self.screen = pygame.display.set_mode(WINDOW_SIZE)
+        self.screen = pygame.display.set_mode(WINDOW_SIZE, pygame.HWACCEL | pygame.DOUBLEBUF)
+        self.clock = pygame.Clock()
+        self.delta = 0
 
+
+
+    def pre_draw_update(self):
+        ...
+
+    def draw(self):
+        ...
+
+    def post_draw_update(self):
+        ...
+
+    def process_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+
+    @staticmethod
+    def update_caption(self, text=""):
+        pygame.display.set_caption(text)
 
     def run(self):
         self.running = True
-        s = pygame.Surface((20,20))
-        s.fill("cyan")
-        r = s.get_rect()
-        r.center = (20 ,20)
         while self.running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.running = False
-
-            self.screen.fill("black")
-            self.screen.blit(s, r)
-            r.centery
-            pygame.display.flip()
+            self.process_events()
+            self.pre_draw_update()
+            self.draw()
+            self.post_draw_update()
