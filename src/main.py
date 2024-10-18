@@ -1,4 +1,4 @@
-from root import Window
+from src.root import Window
 
 
 if __name__ == "__main__":

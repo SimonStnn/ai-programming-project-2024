@@ -29,7 +29,7 @@ class Window:
                 self.running = False
 
     @staticmethod
-    def update_caption(self, text=""):
+    def update_caption(text=""):
         pygame.display.set_caption(text)
 
     def run(self):
