@@ -10,13 +10,12 @@ class Window:
         self.running = False
         self.screen = pygame.display.set_mode(WINDOW_SIZE)
 
-
     def run(self):
         self.running = True
-        s = pygame.Surface((20,20))
+        s = pygame.Surface((20, 20))
         s.fill("cyan")
         r = s.get_rect()
-        r.center = (20 ,20)
+        r.center = (20, 20)
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
