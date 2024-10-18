@@ -1,5 +1,5 @@
 import pygame
-import src.Gamehandler.Player
+import src.game_handler.Player
 
 screen = pygame.display.set_mode((800,600), pygame.HWACCEL | pygame.DOUBLEBUF)
 running = True
