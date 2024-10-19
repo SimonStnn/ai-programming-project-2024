@@ -1,5 +1,5 @@
 """Stack to fill a slot in an inventory"""
-from typing import overload
+from typing import overload, Self
 from attrs import define, field, Factory
 from src.game_handler.items import Item
 
@@ -13,7 +13,9 @@ class Stack:
     @staticmethod
     def can_join(stack1: "Stack", stack2: "Stack") -> bool:
         """Check if two stacks can be joined"""
-        return stack1.item == stack2.item and stack1.capacity == stack2.capacity
+        return (((stack1.item is None and stack2.item is not None) or
+                 stack1.item == stack2.item) and
+                stack1.capacity == stack2.capacity)
 
     @overload
     def add(self, quantity: int):
@@ -23,7 +25,7 @@ class Stack:
     def add(self, item: Item):
         """Add an item to the stack"""
 
-    def add(self, item: "Stack" | Item | int):
+    def add(self, item: Self | Item | int):
         if self.is_full():
             raise ValueError("Stack is full")
 
@@ -54,10 +56,12 @@ class Stack:
 
     def join(self, stack: "Stack") -> None:
         """Join a stack with this stack"""
-        if Stack.can_join(self, stack):
+        if not Stack.can_join(self, stack):
             raise ValueError("Cannot join stacks")
         if self.quantity + stack.quantity > self.capacity:
             stack.quantity -= self.capacity - self.quantity
+        if self.item is None:
+            self.item = stack.item
         self.quantity += stack.quantity
         stack.reset()
 
