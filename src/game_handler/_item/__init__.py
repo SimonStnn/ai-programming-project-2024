@@ -1,24 +1,25 @@
 """Base Item class"""
+from typing import TYPE_CHECKING
+from abc import ABC
+from attrs import define
+
+if TYPE_CHECKING:
+    from src.game_handler.player import Player
 
 
-class Item:
+@define
+class Item(ABC):
     """A game item"""
 
-    @property
-    def name(self) -> str:
+    @classmethod
+    def name(cls) -> str:
         """The name of the item"""
-        return self.__class__.__name__.replace("_", " ")
+        return cls.__name__.replace("_", " ")
 
-    @property
-    def description(self) -> str:
+    @classmethod
+    def description(cls) -> str:
         """The description of the item"""
-        return self.__doc__
-
-    def __str__(self):
-        return f"{self.name} ({self.description[:19] + '…' if len(self.description) > 20 else self.description})"
-
-    def __repr__(self):
-        return str(self)
+        return cls.__doc__
 
 
 class Recipe:
