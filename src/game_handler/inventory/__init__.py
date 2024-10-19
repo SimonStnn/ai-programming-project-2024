@@ -4,13 +4,15 @@ from src.game_handler.items import Item
 
 class Inventory:
     """The player's inventory"""
+    __inventory: list[Item | None]
     width: int
     height: int
 
     def __init__(self, *, width: int = 4, height: int = 4):
         self.width = width
         self.height = height
-        self.inventory: list[Item | None] = [None for _ in range(width * height)]
+        self.__inventory = [None for _ in range(width * height)]
+        assert len(self.__inventory) == self.size
 
     def __validate_column(self, column: int):
         """Validate the column index if it is within the inventory's width"""
@@ -30,25 +32,25 @@ class Inventory:
     def append(self, item: Item):
         """Add an item to the inventory"""
         try:
-            index = next(i for i, stored in enumerate(self.inventory) if stored is None)
-            self.inventory[index] = item
+            index = next(i for i, stored in enumerate(self.__inventory) if stored is None)
+            self.__inventory[index] = item
         except StopIteration:
             raise ValueError("Inventory is full")
 
     def insert_item(self, item: Item, row: int, column: int):
         """Add an item to the inventory"""
         self.__validate_index(row, column)
-        self.inventory[(row * self.width) + column] = item
+        self.__inventory[(row * self.width) + column] = item
 
     def get_item(self, row: int, column: int) -> Item | None:
         """Get an item from the inventory"""
         self.__validate_index(row, column)
-        return self.inventory[(row * self.width) + column]
+        return self.__inventory[(row * self.width) + column]
 
     def is_empty(self, row: int, column: int) -> bool:
         """Check if a slot is empty"""
         self.__validate_index(row, column)
-        return self.inventory[(row * self.width) + column] is None
+        return self.__inventory[(row * self.width) + column] is None
 
     def get_column(self, column: int) -> list[Item | None]:
         """Get a column from the inventory"""
