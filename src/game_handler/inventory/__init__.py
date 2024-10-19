@@ -8,7 +8,12 @@ class Inventory:
     width: int
     height: int
 
-    def __init__(self, *, width: int = 4, height: int = 4):
+    @property
+    def size(self) -> int:
+        """The size of the inventory"""
+        return self.width * self.height
+
+    def __init__(self, width: int = 4, height: int = 4):
         self.width = width
         self.height = height
         self.__inventory = [None for _ in range(width * height)]
