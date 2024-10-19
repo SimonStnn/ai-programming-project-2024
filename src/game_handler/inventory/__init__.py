@@ -2,6 +2,7 @@
 from typing import overload
 from src.game_handler.items import Item
 from src.game_handler.inventory.stack import Stack
+from copy import copy
 
 
 class Inventory:
@@ -56,6 +57,18 @@ class Inventory:
         """Get an item from the inventory"""
         self.__validate_index(row, column)
         return self.__inventory[(row * self.width) + column]
+
+    def remove_item(self, row: int, column: int) -> Stack:
+        """Remove an item from the inventory and return a copy of the stack"""
+        self.__validate_index(row, column)
+        stack = copy(self.get_item(row, column))
+        self.get_item(row, column).reset()
+        return stack
+
+    def split_item(self, row: int, column: int, quantity: int = -1) -> Stack:
+        """Split an item from the inventory"""
+        self.__validate_index(row, column)
+        return self.get_item(row, column).split(quantity)
 
     def is_empty(self, row: int, column: int) -> bool:
         """Check if a slot is empty"""
