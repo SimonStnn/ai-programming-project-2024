@@ -1,6 +1,5 @@
 from collections.abc import Sequence
-
-from pygame import SurfaceType
+from pygame.surface import SurfaceType
 from pygame.image import load
 from pygame.transform import smoothscale
 
