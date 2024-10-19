@@ -1,10 +1,12 @@
 """Inventory class"""
+from typing import overload
 from src.game_handler.items import Item
+from src.game_handler.inventory.stack import Stack
 
 
 class Inventory:
     """The player's inventory"""
-    __inventory: list[Item | None]
+    __inventory: list[Stack]
     width: int
     height: int
 
@@ -16,7 +18,7 @@ class Inventory:
     def __init__(self, width: int = 4, height: int = 4):
         self.width = width
         self.height = height
-        self.__inventory = [None for _ in range(width * height)]
+        self.__inventory = [Stack() for _ in range(width * height)]
         assert len(self.__inventory) == self.size
 
     def __validate_column(self, column: int):
@@ -34,20 +36,23 @@ class Inventory:
         self.__validate_column(column)
         self.__validate_row(row)
 
-    def append(self, item: Item):
-        """Add an item to the inventory"""
+    def append(self, item: Stack | Item):
+        """Add a stack or item to the inventory"""
         try:
-            index = next(i for i, stored in enumerate(self.__inventory) if stored is None)
-            self.__inventory[index] = item
+            index = next(
+                i for i, stored in enumerate(self.__inventory) if
+                isinstance(stored.item, item.__class__) or
+                stored.is_empty())
+            self.__inventory[index].add(item)
         except StopIteration:
             raise ValueError("Inventory is full")
 
-    def insert_item(self, item: Item, row: int, column: int):
-        """Add an item to the inventory"""
+    def insert_item(self, item: Stack | Item, row: int, column: int):
+        """Add a stack or item to the inventory"""
         self.__validate_index(row, column)
-        self.__inventory[(row * self.width) + column] = item
+        self.__inventory[(row * self.width) + column].add(item)
 
-    def get_item(self, row: int, column: int) -> Item | None:
+    def get_item(self, row: int, column: int) -> Stack:
         """Get an item from the inventory"""
         self.__validate_index(row, column)
         return self.__inventory[(row * self.width) + column]
@@ -55,13 +60,13 @@ class Inventory:
     def is_empty(self, row: int, column: int) -> bool:
         """Check if a slot is empty"""
         self.__validate_index(row, column)
-        return self.__inventory[(row * self.width) + column] is None
+        return self.__inventory[(row * self.width) + column].is_empty()
 
-    def get_column(self, column: int) -> list[Item | None]:
+    def get_column(self, column: int) -> list[Stack]:
         """Get a column from the inventory"""
         return [self.get_item(row, column) for row in range(self.height)]
 
-    def get_row(self, row: int) -> list[Item | None]:
+    def get_row(self, row: int) -> list[Stack]:
         """Get a row from the inventory"""
         return [self.get_item(row, column) for column in range(self.width)]
 
