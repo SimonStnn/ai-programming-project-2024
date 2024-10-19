@@ -38,3 +38,21 @@ class Craftable(Item):
     """A craftable item"""
     recipy: Recipe
     duration: int
+
+
+class Interactable(Item):
+    """An interactable item"""
+
+    def interact(self, player: "Player"):
+        pass
+
+
+class Consumable(Interactable):
+    """A consumable item"""
+
+    heals: int
+    hunger: int
+
+    def consume(self, player: "Player"):
+        player.heal(self.heals)
+        player.hunger += self.hunger
