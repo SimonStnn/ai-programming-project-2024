@@ -1,5 +1,6 @@
 """Stack to fill a slot in an inventory"""
 from typing import overload, Self
+from copy import copy
 from attrs import define, field, Factory
 from src.game_handler.items import Item
 
@@ -49,9 +50,12 @@ class Stack:
         self.item = None
         self.quantity = 0
 
-    def split(self, quantity: int) -> "Stack":
-        new_stack = Stack(item=self.item, quantity=quantity)
+    def split(self, quantity: int = -1) -> "Stack":
+        if quantity == -1:
+            quantity = self.quantity // 2
         self.remove(quantity)
+        new_stack = copy(self)
+        new_stack.quantity = quantity
         return new_stack
 
     def join(self, stack: "Stack") -> None:
