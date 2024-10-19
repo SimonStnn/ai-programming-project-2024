@@ -7,7 +7,7 @@ from src.game_handler.items import Item
 @define
 class Stack:
     item: Item | None = field(default=None)
-    quantity: int = field(default=0)
+    quantity: int = field(default=0, validator=lambda _, __, value: value >= 0)
     capacity: int = field(default=64, repr=False, kw_only=True)
 
     @staticmethod
