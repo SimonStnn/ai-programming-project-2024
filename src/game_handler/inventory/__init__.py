@@ -1,4 +1,5 @@
 """Inventory class"""
+from operator import getitem
 from typing import overload
 from src.game_handler.items import Item
 from src.game_handler.inventory.stack import Stack
@@ -51,7 +52,7 @@ class Inventory:
     def insert_item(self, item: Stack | Item, row: int, column: int):
         """Add a stack or item to the inventory"""
         self.__validate_index(row, column)
-        self.__inventory[(row * self.width) + column].add(item)
+        self.get_item(row, column).add(item)
 
     def get_item(self, row: int, column: int) -> Stack:
         """Get an item from the inventory"""
@@ -73,7 +74,7 @@ class Inventory:
     def is_empty(self, row: int, column: int) -> bool:
         """Check if a slot is empty"""
         self.__validate_index(row, column)
-        return self.__inventory[(row * self.width) + column].is_empty()
+        return self.get_item(row, column).is_empty()
 
     def get_column(self, column: int) -> list[Stack]:
         """Get a column from the inventory"""
