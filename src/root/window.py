@@ -8,6 +8,7 @@ class Window:
 
     def __init__(self):
         self.running = False
+        self.visible_sprites = pygame.sprite.Group()
         self.screen = pygame.display.set_mode(WINDOW_SIZE, pygame.HWACCEL | pygame.DOUBLEBUF)
         self.clock = pygame.Clock()
         self.delta = 0

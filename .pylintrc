@@ -1,0 +1,16 @@
+[MESSAGES CONTROL]
+# Enable some checkers that are not activated by default:
+enable = bad-inline-option, deprecated-pragma, file-ignored, use-symbolic-message-instead, useless-suppression
+
+# Include some helpful details on error messages for naming rules:
+include-naming-hint = yes
+
+[MASTER]
+# Informational messages ("I") should make Pylint execution fail (non-0 program return code):
+fail-on = I
+
+# Enable many optional extensions:
+load-plugins = pylint.extensions.bad_builtin,
+               pylint.extensions.code_style,
+               pylint.extensions.comparison_placement,
+               ...
