@@ -1,6 +1,7 @@
 import pygame
-from src.const import WINDOW_SIZE
-
+from src.const import WINDOW_SIZE, SCALED, BLOCKSIZE
+from src.level_handler import Level
+from src.const import PREGENERATED_LEVEL
 
 class Window:
     running: bool
@@ -12,6 +13,9 @@ class Window:
         self.screen = pygame.display.set_mode(WINDOW_SIZE, pygame.HWACCEL | pygame.DOUBLEBUF)
         self.clock = pygame.Clock()
         self.delta = 0
+        self.current_level = Level()
+        self.current_level.update_map(PREGENERATED_LEVEL, BLOCKSIZE)
+        print(self.current_level)
 
 
 
@@ -19,10 +23,13 @@ class Window:
         ...
 
     def draw(self):
-        ...
+        self.screen.fill("White")
+        self.current_level.draw(self.screen)
+        self.visible_sprites.draw(self.screen)
+        pygame.display.flip()
 
     def post_draw_update(self):
-        ...
+        self.delta = self.clock.tick(60)
 
     def process_events(self):
         for event in pygame.event.get():

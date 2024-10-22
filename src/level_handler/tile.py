@@ -13,7 +13,7 @@ class Tile(Sprite):
         return str(self)
 
     def __str__(self):
-        return f"Tile:{self.type=}, @{self.rect.center=}"
+        return f"Tile:{self.type=}, @{self.rect.topleft=}"
 
 
 if __name__ == "__main__":
