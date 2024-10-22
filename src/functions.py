@@ -1,4 +1,20 @@
 import os
+import platform
+
+if platform.system() == "Windows":
+    import ctypes
+    def get_keyboard_layout():
+        user32 = ctypes.WinDLL('user32', use_last_error=True)
+        layout = user32.GetKeyboardLayout(0) & 0xFFFF
+        if layout | 0x409:
+            return "QWERTY"
+        elif layout | 0xC0C:
+            return "AZERTY"
+        elif layout | 0x807:
+            return "QWERTZ"
+        else:
+            return "Unknown"
+
 
 def relative_path(base_path: str, target_path: str) -> str:
     return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", base_path, target_path))
@@ -19,5 +35,4 @@ def get_character_path(character) -> str:
 
 
 if __name__ == "__main__":
-    from const import Animals
-    print(get_animals_path(Animals.BIRD))
+    print(get_keyboard_layout())

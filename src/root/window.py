@@ -15,6 +15,7 @@ class Window:
         self.visible_sprites = VisibleSprites(player=self.player)
         self.screen = pygame.display.set_mode(WINDOW_SIZE,pygame.HWACCEL | pygame.DOUBLEBUF | pygame.RESIZABLE | pygame.SCALED)
         self.clock = pygame.Clock()
+        # get keyboard type (QWERTY, AZERTY, QWERTZ)
         self.vsync = True
         self.delta = 0
         self.current_level = Level()
