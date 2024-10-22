@@ -1,32 +1,11 @@
-import os
-import platform
+import os, platform, sys
 
 if platform.system() == "Windows":
-    import ctypes
-
-
     def get_keyboard_layout():
-        user32 = ctypes.WinDLL('user32', use_last_error=True)
-
-        # Get the keyboard layout identifier
-        layout = user32.GetKeyboardLayout(0)
-
-        # Extract the low-order word (language ID)
-        layout_id = layout & 0xFFFF
-
-        # Mapping common layout IDs to their corresponding layouts
-        layout_map = {
-            0x409: "QWERTY (US)",
-            0x809: "QWERTY (UK)",
-            0x807: "QWERTZ (German)",
-            0x40C: "AZERTY (French)",
-            0xC0C: "QWERTY (Canadian French)"
-            # Add more layout mappings as needed
-        }
-
-        return layout_map.get(layout_id, f"Unknown (ID: {hex(layout_id)})")
-
-
+        import locale
+        current_locale = locale.getdefaultlocale()[0]
+        azerty_locales = ['fr_FR', 'be_FR', 'fr_BE', 'fr_LU', 'fr_CH', 'fr_MC']
+        return "AZERTY" if current_locale in azerty_locales else "QWERTY"
 
 
 def relative_path(base_path: str, target_path: str) -> str:

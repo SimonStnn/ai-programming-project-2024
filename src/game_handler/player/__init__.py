@@ -4,9 +4,8 @@ from pygame.surface import Surface
 from src.game_handler.inventory import Inventory
 from src.game_handler.items import Log
 from pygame.sprite import Sprite
-from pygame.locals import K_w, K_s, K_a, K_d
-from pygame.key import ScancodeWrapper
-
+from pygame.locals import K_w, K_s, K_a, K_d, K_z, K_q, K_d
+from src.functions import get_keyboard_layout
 
 class Player(Sprite):
     """The player"""
@@ -45,13 +44,13 @@ class Player(Sprite):
     def events(self, event):
         # movements
         self.movement = Vector2(0, 0)
-        if event[K_w]:
+        if event[K_w if get_keyboard_layout() == "QWERTY" else K_z]:
             self.movement.y = -1
-        if event[K_s]:
+        if event[K_s if get_keyboard_layout() == "QWERTY" else K_s]:
             self.movement.y = 1
-        if event[K_a]:
+        if event[K_a if get_keyboard_layout() == "QWERTY" else K_q]:
             self.movement.x = -1
-        if event[K_d]:
+        if event[K_d if get_keyboard_layout() == "QWERTY" else K_d]:
             self.movement.x = 1
 
         self.movement = self.movement.normalize() if self.movement.length() > 0 else self.movement
