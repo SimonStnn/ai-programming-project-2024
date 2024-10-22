@@ -1,7 +1,7 @@
 """Base Item class"""
 from typing import TYPE_CHECKING
-from abc import ABC
-from attrs import define
+from abc import ABC, abstractmethod
+from attrs import define, field, validators
 
 if TYPE_CHECKING:
     from src.game_handler.player import Player
@@ -22,16 +22,12 @@ class Item(ABC):
         return cls.__doc__
 
 
+@define
 class Recipe:
     """A recipe for crafting items"""
     ingredients: dict[type[Item], int]
     duration: int
-    result: type[Item]
-
-    def __init__(self, ingredients: dict[type[Item], int], duration: int, result: type[Item]):
-        self.ingredients = ingredients
-        self.duration = duration
-        self.result = result
+    result: dict[type[Item], int]
 
 
 class Craftable(Item):
