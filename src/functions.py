@@ -11,7 +11,13 @@ def img_path(target_path: str) -> str | None:
     if not os.path.exists(e): return None
     return e
 
+def get_animals_path(animal) -> str:
+    return img_path(f"Animals/{animal}.png")
+
+def get_character_path(character) -> str:
+    return img_path(f"Characters/{character}.png")
 
 
 if __name__ == "__main__":
-    print(img_path("logo.png"))
+    from const import Animals
+    print(get_animals_path(Animals.BIRD))

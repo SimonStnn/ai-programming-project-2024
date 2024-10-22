@@ -1,7 +1,9 @@
 import pygame
 from src.const import WINDOW_SIZE, SCALED, BLOCKSIZE
+from src.game_handler.groups.visible_sprites import VisibleSprites
 from src.level_handler import Level
 from src.const import PREGENERATED_LEVEL
+from src.game_handler.player import Player
 
 class Window:
     running: bool
@@ -9,18 +11,20 @@ class Window:
 
     def __init__(self):
         self.running = False
-        self.visible_sprites = pygame.sprite.Group()
-        self.screen = pygame.display.set_mode(WINDOW_SIZE, pygame.HWACCEL | pygame.DOUBLEBUF)
+        self.player = Player()
+        self.visible_sprites = VisibleSprites(player=self.player)
+        self.screen = pygame.display.set_mode(WINDOW_SIZE,pygame.HWACCEL | pygame.DOUBLEBUF | pygame.RESIZABLE | pygame.SCALED)
         self.clock = pygame.Clock()
+        self.vsync = True
         self.delta = 0
         self.current_level = Level()
         self.current_level.update_map(PREGENERATED_LEVEL, BLOCKSIZE)
-        print(self.current_level)
 
 
 
     def pre_draw_update(self):
-        ...
+        self.visible_sprites.update(self.delta)
+        self.player.events(pygame.key.get_pressed())
 
     def draw(self):
         self.screen.fill("White")
@@ -29,12 +33,14 @@ class Window:
         pygame.display.flip()
 
     def post_draw_update(self):
-        self.delta = self.clock.tick(60)
+        self.delta = self.clock.tick(pygame.display.get_desktop_refresh_rates()[0] if self.vsync else 60)
 
     def process_events(self):
+        self.delta = self.clock.tick(60)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
+
 
     @staticmethod
     def update_caption(text=""):

@@ -21,13 +21,35 @@ class Level:
     def __add_tile(self, tile: int, pos: tuple[int, int]):
         self.map.append(Tile(self.__get_img(tile), self.__get_type(tile),  pos))
 
-    @staticmethod
-    def __get_img(tile):
-        return pygame.surface.Surface(BLOCKSIZE)
+    def __get_img(self, tile):
+        s = pygame.surface.Surface(BLOCKSIZE)
+        s.fill(self.__get_color(tile))
+        return s
+
+    def __get_color(self, tile):
+        match tile:
+            case 0:
+                return (0, 255, 0)
+            case 1:
+                return (0, 0, 255)
+            case 2:
+                return (255, 0, 0)
+            case 3:
+                return (255, 255, 0)
+            case 4:
+                return (255, 0, 255)
+            case 5:
+                return (0, 255, 255)
+            case 6:
+                return (255, 255, 255)
+            case 7:
+                return (0, 0, 0)
+            case _:
+                return (0, 0, 0)
+
 
     def draw(self, screen):
         for x,tile in enumerate(self.map):
-            tile.image.fill((x* 10 % 255, 0, 0))
             screen.blit(tile.image, tile.rect)
 
     def __str__(self):

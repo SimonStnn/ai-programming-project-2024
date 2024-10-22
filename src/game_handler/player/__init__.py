@@ -1,13 +1,20 @@
 """The player class"""
+from pygame.math import Vector2
+from pygame.surface import Surface
 from src.game_handler.inventory import Inventory
 from src.game_handler.items import Log
+from pygame.sprite import Sprite
+from pygame.locals import K_w, K_s, K_a, K_d
+from pygame.key import ScancodeWrapper
 
 
-class Player:
+class Player(Sprite):
     """The player"""
     _health: int
     _hunger: int
     inventory: Inventory
+    movement: Vector2 = Vector2(0, 0)
+
 
     @property
     def health(self):
@@ -28,9 +35,30 @@ class Player:
         self._hunger = max(0, min(value, 100))
 
     def __init__(self, *, health: int = 100, hunger: int = 100):
+        super().__init__()
+        self.image = Surface((32, 32))
+        self.rect = self.image.get_rect()
         self.inventory = Inventory()
         self.health = health
         self.hunger = hunger
+
+    def events(self, event):
+        # movements
+        self.movement = Vector2(0, 0)
+        if event[K_w]:
+            self.movement.y = -1
+        if event[K_s]:
+            self.movement.y = 1
+        if event[K_a]:
+            self.movement.x = -1
+        if event[K_d]:
+            self.movement.x = 1
+
+        self.movement = self.movement.normalize() if self.movement.length() > 0 else self.movement
+
+    def update(self, delta):
+        self.rect.move_ip(self.movement * delta)
+
 
     def take_damage(self, damage: int):
         """Take player damage"""
