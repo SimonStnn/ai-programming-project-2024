@@ -5,7 +5,17 @@ if platform.system() == "Windows":
         import locale
         current_locale = locale.getdefaultlocale()[0]
         azerty_locales = ['fr_FR', 'be_FR', 'fr_BE', 'fr_LU', 'fr_CH', 'fr_MC']
-        return "AZERTY" if current_locale in azerty_locales else "QWERTY"
+        qwertz_locales = ['de_DE', 'de_CH', 'de_AT', 'de_LU', 'gsw_DE', 'gsw_CH']
+        qwerty_locales = ["en_GB", "en_US", "en_AU", "en_CA"]
+        if current_locale in azerty_locales:
+            return "AZERTY"
+        elif current_locale in qwertz_locales:
+            return "QWERTZ"
+        elif current_locale in qwerty_locales:
+            return "QWERTY"
+        else:
+            raise ValueError(f"Unsupported keyboard layout: {current_locale}")
+
 
 
 def relative_path(base_path: str, target_path: str) -> str:
