@@ -54,6 +54,9 @@ class Window:
     def swap_scene(self, scene):
         self.current_scene = scene
         self.current_scene.screen = self.screen
+        if isinstance(scene, MainGame):
+            self.current_scene.reset_map()
+
 
 
     @staticmethod

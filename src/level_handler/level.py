@@ -1,4 +1,3 @@
-from src.const import BLOCKSIZE
 import pygame.surface
 from src.level_handler.tile import Tile
 from src.level_handler.level_enum import TileType
@@ -6,11 +5,12 @@ from src.level_handler.level_enum import TileType
 class Level:
     map: list[Tile|None] = list()
 
+
     def update_map(self, m: list[list[int]], blocksize: list[int]):
         self.map.clear()
         for y ,  row in enumerate(m):
             for x,  col in enumerate(row):
-                self.__add_tile(col, (x * blocksize[0], y * blocksize[1]))
+                self.__add_tile(col, (x * blocksize[0], y * blocksize[1]), blocksize)
 
     @staticmethod
     def __get_type(tile: int):
@@ -18,11 +18,11 @@ class Level:
             case 0 | _:
                 return TileType.GRASS
 
-    def __add_tile(self, tile: int, pos: tuple[int, int]):
-        self.map.append(Tile(self.__get_img(tile), self.__get_type(tile),  pos))
+    def __add_tile(self, tile: int, pos: tuple[int, int], blocksize: list[int]):
+        self.map.append(Tile(self.__get_img(tile, blocksize), self.__get_type(tile),  pos))
 
-    def __get_img(self, tile):
-        s = pygame.surface.Surface(BLOCKSIZE)
+    def __get_img(self, tile, block_size):
+        s = pygame.surface.Surface(block_size)
         s.fill(self.__get_color(tile))
         return s
 
@@ -61,5 +61,5 @@ class Level:
 
 if __name__ == "__main__":
     l = Level()
-    l.update_map([[0, 0, 0], [0, 0, 0], [0, 0, 0]], BLOCKSIZE)
+    l.update_map([[0, 0, 0], [0, 0, 0], [0, 0, 0]], [10, 10])
     print(l.map)

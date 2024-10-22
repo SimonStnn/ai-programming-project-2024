@@ -26,12 +26,10 @@ RESOLUTIONS = [
     (1280, 720),
     (1920, 1080)
 ]
+WORLD_SIZE = (20, 20)
 
-BLOCKSIZE = (32, 32)
+def generate_level():
+    return [[randint(0, 5) for _ in range(WORLD_SIZE[0])] for _ in range(WORLD_SIZE[1])]
 
-# blocksize scaled to the window size
-def scale_to_window( resolution):
-    return resolution[0] // BLOCKSIZE[0], resolution[1] // BLOCKSIZE[1]
-# to fully fill the screen you need a list[list[int]] with the same dimensions as SCALED
-def pregenerate_level(scaled):
-    return [[randint(0, 4) for _ in range(scaled[0])] for _ in range(scaled[1])]
+def block_size(resolution):
+    return resolution[0] // WORLD_SIZE[0], resolution[1] // WORLD_SIZE[1]
