@@ -1,9 +1,7 @@
 import pygame
-from src.const import WINDOW_SIZE, SCALED, BLOCKSIZE
-from src.game_handler.groups.visible_sprites import VisibleSprites
-from src.level_handler import Level
-from src.const import PREGENERATED_LEVEL
-from src.game_handler.player import Player
+from src.const import WINDOW_SIZE
+from pygame_gui import UIManager, elements, UI_BUTTON_PRESSED
+from src.root.main_game import MainGame
 
 class Window:
     running: bool
@@ -11,36 +9,50 @@ class Window:
 
     def __init__(self):
         self.running = False
-        self.player = Player()
-        self.visible_sprites = VisibleSprites(player=self.player)
-        self.screen = pygame.display.set_mode(WINDOW_SIZE,pygame.HWACCEL | pygame.DOUBLEBUF | pygame.RESIZABLE | pygame.SCALED)
+        self.flags = pygame.HWACCEL | pygame.DOUBLEBUF | pygame.RESIZABLE | pygame.SCALED
+        self.screen = pygame.display.set_mode(WINDOW_SIZE, self.flags)
         self.clock = pygame.Clock()
-        # get keyboard type (QWERTY, AZERTY, QWERTZ)
-        self.vsync = True
+        self.vsync = False
+        self.current_scene = MainGame()
+        self.manager = UIManager(WINDOW_SIZE)
+        self.hello_button = elements.UIButton(relative_rect=pygame.Rect((350, 275), (100, 50)), text='Say Hello', manager=self.manager)
         self.delta = 0
-        self.current_level = Level()
-        self.current_level.update_map(PREGENERATED_LEVEL, BLOCKSIZE)
 
 
 
     def pre_draw_update(self):
-        self.visible_sprites.update(self.delta)
-        self.player.events(pygame.key.get_pressed())
+        self.delta = self.clock.tick(pygame.display.get_desktop_refresh_rates()[0] if self.vsync else 60) / 1000.0
+        self.current_scene.delta = self.delta
+        self.current_scene.pre_draw_update()
 
     def draw(self):
         self.screen.fill("White")
-        self.current_level.draw(self.screen)
-        self.visible_sprites.draw(self.screen)
+        self.current_scene.draw()
+        self.manager.draw_ui(self.screen)
         pygame.display.flip()
 
     def post_draw_update(self):
-        self.delta = self.clock.tick(pygame.display.get_desktop_refresh_rates()[0] if self.vsync else 60)
+        self.manager.update(self.delta)
 
     def process_events(self):
-        self.delta = self.clock.tick(60)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self.running = False
+                if event.key == pygame.K_F11:
+                    pygame.display.toggle_fullscreen()
+
+            if event.type == UI_BUTTON_PRESSED:
+                if event.ui_element == self.hello_button:
+                    self.vsync = not self.vsync
+
+            self.manager.process_events(event)
+
+
+
 
 
     @staticmethod

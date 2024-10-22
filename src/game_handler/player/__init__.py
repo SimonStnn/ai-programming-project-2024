@@ -36,6 +36,7 @@ class Player(Sprite):
     def __init__(self, *, health: int = 100, hunger: int = 100):
         super().__init__()
         self.image = Surface((32, 32))
+        self.image.fill("Red")
         self.rect = self.image.get_rect()
         self.inventory = Inventory()
         self.health = health
@@ -56,8 +57,7 @@ class Player(Sprite):
         self.movement = self.movement.normalize() if self.movement.length() > 0 else self.movement
 
     def update(self, delta):
-        self.rect.move_ip(self.movement * delta)
-
+        self.rect.move_ip(self.movement * delta * 250)
 
     def take_damage(self, damage: int):
         """Take player damage"""
