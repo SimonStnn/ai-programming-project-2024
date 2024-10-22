@@ -1,4 +1,4 @@
-from src.const import BLOCKSIZE, SCALED
+from src.const import BLOCKSIZE
 import pygame.surface
 from src.level_handler.tile import Tile
 from src.level_handler.level_enum import TileType

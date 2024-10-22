@@ -1,17 +1,16 @@
-from pygame.display import get_surface
 from pygame.key import get_pressed
 from src.game_handler.player import Player
 from src.game_handler.groups.visible_sprites import VisibleSprites
 from src.level_handler import Level
-from src.const import PREGENERATED_LEVEL, BLOCKSIZE
+from src.const import BLOCKSIZE, pregenerate_level, scale_to_window
 
 class MainGame:
-    def __init__(self):
-        self.screen = get_surface()
+    def __init__(self, master):
+        self.master = master
         self.player = Player()
         self.visible_sprites = VisibleSprites(player=self.player)
         self.current_level = Level()
-        self.current_level.update_map(PREGENERATED_LEVEL, BLOCKSIZE)
+        self.current_level.update_map(pregenerate_level(scale_to_window(self.master.screen.get_size())), BLOCKSIZE)
         self.delta = 0
 
     def pre_draw_update(self):
@@ -19,6 +18,12 @@ class MainGame:
         self.player.events(get_pressed())
 
     def draw(self):
-        self.screen.fill("White")
-        self.current_level.draw(self.screen)
-        self.visible_sprites.draw(self.screen)
+        self.master.screen.fill("White")
+        self.current_level.draw(self.master.screen)
+        self.visible_sprites.draw(self.master.screen)
+
+    def post_draw_update(self):
+        pass
+
+    def process_events(self, event):
+        pass

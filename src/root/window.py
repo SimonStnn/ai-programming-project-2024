@@ -1,7 +1,7 @@
 import pygame
-from src.const import WINDOW_SIZE
-from pygame_gui import UIManager, elements, UI_BUTTON_PRESSED
+from src.const import RESOLUTIONS
 from src.root.main_game import MainGame
+from src.root.settings import SettingsWindow
 
 class Window:
     running: bool
@@ -9,13 +9,15 @@ class Window:
 
     def __init__(self):
         self.running = False
-        self.flags = pygame.HWACCEL | pygame.DOUBLEBUF | pygame.RESIZABLE | pygame.SCALED
-        self.screen = pygame.display.set_mode(WINDOW_SIZE, self.flags)
+        self.flags = pygame.HWACCEL | pygame.DOUBLEBUF
+        self.screen = pygame.display.set_mode(RESOLUTIONS[0], self.flags)
         self.clock = pygame.Clock()
         self.vsync = False
-        self.current_scene = MainGame()
-        self.manager = UIManager(WINDOW_SIZE)
-        self.hello_button = elements.UIButton(relative_rect=pygame.Rect((350, 275), (100, 50)), text='Say Hello', manager=self.manager)
+        self.scenes = {
+            "MainGame": MainGame(self),
+            "SettingsWindow": SettingsWindow(self)
+        }
+        self.current_scene = self.scenes["MainGame"]
         self.delta = 0
 
 
@@ -28,11 +30,10 @@ class Window:
     def draw(self):
         self.screen.fill("White")
         self.current_scene.draw()
-        self.manager.draw_ui(self.screen)
         pygame.display.flip()
 
     def post_draw_update(self):
-        self.manager.update(self.delta)
+        self.current_scene.post_draw_update()
 
     def process_events(self):
         for event in pygame.event.get():
@@ -41,18 +42,18 @@ class Window:
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    self.running = False
+                    if isinstance(self.current_scene, MainGame): self.swap_scene(self.scenes["SettingsWindow"])
+                    else: self.swap_scene(self.scenes["MainGame"])
                 if event.key == pygame.K_F11:
                     pygame.display.toggle_fullscreen()
 
-            if event.type == UI_BUTTON_PRESSED:
-                if event.ui_element == self.hello_button:
-                    self.vsync = not self.vsync
-
-            self.manager.process_events(event)
+            self.current_scene.process_events(event)
 
 
 
+    def swap_scene(self, scene):
+        self.current_scene = scene
+        self.current_scene.screen = self.screen
 
 
     @staticmethod
