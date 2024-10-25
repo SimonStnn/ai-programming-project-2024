@@ -51,8 +51,10 @@ class Stack:
             self.quantity += item
 
     def remove(self, quantity: int):
+        if self.quantity < quantity:
+            raise ValueError("Not enough items in stack")
         self.quantity -= quantity
-        if self.quantity <= 0:
+        if self.quantity == 0:
             self.reset()
 
     def reset(self):
