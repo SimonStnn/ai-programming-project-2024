@@ -37,8 +37,28 @@ class Recipe:
 
 class Craftable(Item):
     """A craftable item"""
-    recipy: Recipe
-    duration: int
+    duration: int = field(
+        converter=int,
+        validator=[validators.instance_of(int), validators.ge(0)],
+        default=0
+    )
+
+    @property
+    @abstractmethod
+    def recipe(self) -> Recipe: ...
+
+    @property
+    def result(self) -> dict[type[Item], int]:
+        return self.recipe.result
+
+    def craft(self, player: "Player"):
+        if all(player.inventory.contains(ingredient, quantity) for ingredient, quantity in self.recipe.ingredients.items()):
+            for ingredient, quantity in self.recipe.ingredients.items():
+                player.inventory.remove_item(ingredient, quantity)
+            player.inventory.append(self.recipe.result)
+
+        player.inventory.contains(self.recipe.ingredients)
+        player.inventory.append(self.recipe.result)
 
 
 class Interactable(Item):
