@@ -21,6 +21,11 @@ class Item(ABC):
         """The description of the item"""
         return cls.__doc__
 
+    def __eq__(self, other):
+        if other == type(self):
+            return True
+        return super().__eq__(other)
+
 
 @define
 class Recipe:
