@@ -1,22 +1,13 @@
 """Stack to fill a slot in an inventory"""
-from typing import overload, Self, Protocol
+from typing import overload, Self
 from copy import copy
 from attrs import define, field, Factory
 from src.game_handler.items import Item
 
 
-class _StackType(Protocol):
-    item: Item | type[Item] | None
-    quantity: int
-    capacity: int
-
-
 @define
 class Stack:
-    item: Item | type[Item] | None = field(
-        default=None,
-        converter=lambda item: type(item) if isinstance(item, Item) else item
-    )
+    item: Item | None = field(default=None)
     quantity: int = field(default=0, validator=lambda _, __, value: value >= 0)
     capacity: int = field(default=64, repr=False, kw_only=True)
 
@@ -40,10 +31,10 @@ class Stack:
             raise ValueError("Stack is full")
 
         if isinstance(item, Item):
-            if self.item != item:
-                raise ValueError("Item type mismatch")
-            elif self.item is None:
+            if self.item is None:
                 self.item = item
+            elif self.item != item:
+                raise ValueError("Item type mismatch")
             self.quantity += 1
         elif isinstance(item, Stack):
             self.join(item)
@@ -83,25 +74,6 @@ class Stack:
 
     def is_full(self) -> bool:
         return self.quantity == self.capacity
-
-    @overload
-    def has(self, quantity: int) -> bool:
-        return self.quantity >= quantity
-
-    @overload
-    def has(self, item: Item | type[Item]) -> bool:
-        return self.item == item
-
-    def has(self, item: Item | type[Item] | int) -> bool:
-        if isinstance(item, int):
-            return self.quantity >= item
-        return self.item == item if isinstance(item, type) else self.item == item.__class__
-
-    def contains(self, item: Item | type[Item] | _StackType, quantity: int = 1) -> bool:
-        if isinstance(item, Stack):
-            quantity = item.quantity
-            item = item.item
-        return self.has(item) and self.has(quantity)
 
 
 if __name__ == "__main__":
