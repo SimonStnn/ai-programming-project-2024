@@ -40,10 +40,10 @@ class Stack:
             raise ValueError("Stack is full")
 
         if isinstance(item, Item):
-            if self.item != item:
-                raise ValueError("Item type mismatch")
-            elif self.item is None:
+            if self.item is None:
                 self.item = item
+            elif self.item != item:
+                raise ValueError("Item type mismatch")
             self.quantity += 1
         elif isinstance(item, Stack):
             self.join(item)
