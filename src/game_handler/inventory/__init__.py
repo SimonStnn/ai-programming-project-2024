@@ -1,5 +1,4 @@
 """Inventory class"""
-from operator import getitem
 from typing import overload
 from src.game_handler.items import Item
 from src.game_handler.inventory.stack import Stack
@@ -40,14 +39,7 @@ class Inventory:
 
     def append(self, item: Stack | Item):
         """Add a stack or item to the inventory"""
-        try:
-            index = next(
-                i for i, stored in enumerate(self.__inventory) if
-                isinstance(stored.item, item.__class__) or
-                stored.is_empty())
-            self.__inventory[index].add(item)
-        except StopIteration:
-            raise ValueError("Inventory is full")
+        self.get_item(*self.find(item) if self.contains(item) else self.first_empty()).add(item)
 
     def insert_item(self, item: Stack | Item, row: int, column: int):
         """Add a stack or item to the inventory"""
@@ -71,10 +63,49 @@ class Inventory:
         self.__validate_index(row, column)
         return self.get_item(row, column).split(quantity)
 
+    @overload
+    def is_empty(self) -> bool:
+        ...
+
+    @overload
     def is_empty(self, row: int, column: int) -> bool:
+        ...
+
+    def is_empty(self, row: int | None = None, column: int | None = None) -> bool:
         """Check if a slot is empty"""
+        if row is None and column is None:
+            return all(stack.is_empty() for stack in self.__inventory)
+
         self.__validate_index(row, column)
         return self.get_item(row, column).is_empty()
+
+    @overload
+    def contains(self, item: Item, quantity: int = 1) -> bool:
+        ...
+
+    @overload
+    def contains(self, item: Stack) -> bool:
+        ...
+
+    def contains(self, item: Stack | Item, quantity: int = 1) -> bool:
+        """Check if the inventory contains an item"""
+        if isinstance(item, Item):
+            item = Stack(item, 1)
+        return any(stack.contains(item, quantity) for stack in self.__inventory)
+
+    def first_empty(self) -> tuple[int, int]:
+        """Find the first empty slot in the inventory"""
+        for i, stack in enumerate(self.__inventory):
+            if stack.is_empty():
+                return divmod(i, self.width)
+        raise ValueError("Inventory is full")
+
+    def find(self, item: Item | type[Item]) -> tuple[int, int]:
+        """Find the first occurrence of an item in the inventory"""
+        for i, stack in enumerate(self.__inventory):
+            if stack.item == item if isinstance(item, type) else type(item):
+                return divmod(i, self.width)
+        raise ValueError("Item not found")
 
     def get_column(self, column: int) -> list[Stack]:
         """Get a column from the inventory"""
