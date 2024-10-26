@@ -48,6 +48,8 @@ class Stack:
         elif isinstance(item, Stack):
             self.join(item)
         else:
+            if self.quantity + item > self.capacity:
+                raise ValueError("Not enough space in stack")
             self.quantity += item
 
     def remove(self, quantity: int):
