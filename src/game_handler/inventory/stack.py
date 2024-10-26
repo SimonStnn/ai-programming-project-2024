@@ -1,5 +1,5 @@
 """Stack to fill a slot in an inventory"""
-from typing import overload, Self, Protocol
+from typing import overload, Union, Protocol
 from copy import copy
 from attrs import define, field, Factory
 from src.game_handler.items import Item
@@ -35,7 +35,7 @@ class Stack:
     def add(self, item: Item):
         """Add an item to the stack"""
 
-    def add(self, item: Self | Item | int):
+    def add(self, item: Union["Stack",Item, int]):
         if self.is_full():
             raise ValueError("Stack is full")
 
