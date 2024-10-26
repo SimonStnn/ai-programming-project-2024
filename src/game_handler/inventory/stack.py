@@ -64,8 +64,8 @@ class Stack:
     def split(self, quantity: int = -1) -> "Stack":
         if quantity == -1:
             quantity = self.quantity // 2
-        self.remove(quantity)
         new_stack = copy(self)
+        self.remove(quantity)
         new_stack.quantity = quantity
         return new_stack
 
