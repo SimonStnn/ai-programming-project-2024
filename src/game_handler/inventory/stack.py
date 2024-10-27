@@ -106,8 +106,3 @@ class Stack:
             quantity = item.quantity
             item = item.item
         return self.has(item) and self.has(quantity)
-
-
-if __name__ == "__main__":
-    stack = Stack()
-    print(stack)
