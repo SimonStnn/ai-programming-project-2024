@@ -10,7 +10,7 @@ class TestInventory(unittest.TestCase):
         inventory.append(Log())
         self.assertEqual(inventory.get_item(0, 0), Stack(Log(), 1))
         self.assertEqual(inventory.get_item(0, 0), Stack(Log, 1))
-        print(inventory)
+
         inventory.append(Log())
         self.assertEqual(inventory.get_item(0, 0), Stack(Log(), 2))
         self.assertEqual(inventory.get_item(0, 0), Stack(Log, 2))
