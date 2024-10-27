@@ -35,7 +35,7 @@ class Stack:
     def add(self, item: Item):
         """Add an item to the stack"""
 
-    def add(self, item: Union["Stack",Item, int]):
+    def add(self, item: Union["Stack", Item, int]):
         if self.is_full():
             raise ValueError("Stack is full")
 
@@ -75,12 +75,12 @@ class Stack:
         """Join a stack with this stack"""
         if not Stack.can_join(self, stack):
             raise ValueError("Cannot join stacks")
-        if self.quantity + stack.quantity > self.capacity:
-            stack.quantity -= self.capacity - self.quantity
         if self.item is None:
             self.item = stack.item
-        self.quantity += stack.quantity
-        stack.reset()
+
+        quantity = min(self.capacity - self.quantity, stack.quantity)
+        self.add(quantity)
+        stack.remove(quantity)
 
     def is_empty(self) -> bool:
         return self.quantity == 0
