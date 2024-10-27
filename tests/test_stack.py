@@ -82,6 +82,9 @@ class TestStack(unittest.TestCase):
 
         self.assertRaises(ValueError, stack.add, Stick())
 
+        stack = Stack(Log(), 63, capacity=64)
+        self.assertRaises(ValueError, stack.add, 2)
+
     def test_remove(self):
         stack = Stack(Log(), 2)
         stack.remove(1)
@@ -104,3 +107,23 @@ class TestStack(unittest.TestCase):
         self.assertEqual(new_stack, Stack(Log(), 1))
 
         self.assertRaises(ValueError, stack.split, 1)
+
+    def test_join(self):
+        stack = Stack(Log(), 1, capacity=64)
+        new_stack = Stack(Log(), 1)
+        stack.join(new_stack)
+        self.assertEqual(stack, Stack(Log(), 2))
+        self.assertEqual(new_stack, Stack())
+
+        stack.join(Stack(Log(), 1))
+        self.assertEqual(stack, Stack(Log(), 3))
+
+        new_stack = Stack(Stick(), 1)
+        self.assertRaises(ValueError, stack.join, new_stack)
+
+        # Test capacity
+        stack = Stack(Log(), 36, capacity=64)
+        stack2 = Stack(Log(), 64, capacity=64)
+        stack.join(stack2)
+        self.assertEqual(stack, Stack(Log(), 64))
+        self.assertEqual(stack2, Stack(Log(), 36))
