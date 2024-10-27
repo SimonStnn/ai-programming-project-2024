@@ -144,3 +144,21 @@ class TestStack(unittest.TestCase):
         self.assertFalse(stack.has(6))
         self.assertFalse(stack.has(Stick))
         self.assertFalse(stack.has(Stick()))
+
+    def test_contains(self):
+        stack = Stack(Log(), 5)
+        self.assertTrue(stack.contains(Log))
+        self.assertTrue(stack.contains(Log()))
+        self.assertTrue(stack.contains(Log(), 2))
+        self.assertFalse(stack.contains(Log(), 6))
+        self.assertFalse(stack.contains(Stick))
+        self.assertFalse(stack.contains(Stick()))
+        self.assertFalse(stack.contains(Stick(), 2))
+        self.assertFalse(stack.contains(Stick(), 6))
+
+        stack = Stack(Log(), 5)
+        stack2 = Stack(Log(), 5)
+        self.assertTrue(stack.contains(stack2))
+        self.assertTrue(stack.contains(stack2))
+        stack.remove(1)
+        self.assertFalse(stack.contains(stack2))
