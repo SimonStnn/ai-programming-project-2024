@@ -61,6 +61,13 @@ class TestStack(unittest.TestCase):
         self.assertTrue(stack.is_empty())
         self.assertEqual(stack.quantity, 0)
 
+    def test_is_full(self):
+        stack = Stack(Log(), 64, capacity=64)
+        self.assertTrue(stack.is_full())
+
+        stack = Stack(Log(), 63, capacity=64)
+        self.assertFalse(stack.is_full())
+
     def test_add(self):
         stack = Stack()
         self.assertFalse(stack.contains(Log))
