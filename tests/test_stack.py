@@ -115,6 +115,17 @@ class TestStack(unittest.TestCase):
 
         self.assertRaises(ValueError, stack.split, 1)
 
+    def test_can_join(self):
+        self.assertTrue(Stack.can_join(Stack(Log(), 1), Stack(Log(), 1)))
+        self.assertTrue(Stack.can_join(Stack(Log(), 1), Stack(Log, 1)))
+        self.assertTrue(Stack.can_join(Stack(Log(), 32, capacity=64), Stack(Log, 32, capacity=64)))
+        self.assertTrue(Stack.can_join(Stack(Log(), 32, capacity=64), Stack(Log(), 33, capacity=64)))
+        self.assertTrue(Stack.can_join(Stack(Log(), 33, capacity=64), Stack(Log(), 32, capacity=64)))
+        self.assertTrue(Stack.can_join(Stack(capacity=64), Stack(Log(), 32, capacity=64)))
+        self.assertFalse(Stack.can_join(Stack(Log(), 1), Stack(Stick(), 1)))
+        self.assertFalse(Stack.can_join(Stack(Log(), 9, capacity=16), Stack(Log(), 32, capacity=64)))
+        self.assertFalse(Stack.can_join(Stack(Log(), 9), Stack()))
+
     def test_join(self):
         stack = Stack(Log(), 1, capacity=64)
         new_stack = Stack(Log(), 1)
