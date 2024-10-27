@@ -90,11 +90,11 @@ class Stack:
 
     @overload
     def has(self, quantity: int) -> bool:
-        return self.quantity >= quantity
+        ...
 
     @overload
     def has(self, item: Item | type[Item]) -> bool:
-        return self.item == item
+        ...
 
     def has(self, item: Item | type[Item] | int) -> bool:
         if isinstance(item, int):
