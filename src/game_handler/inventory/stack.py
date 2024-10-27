@@ -101,7 +101,7 @@ class Stack:
             return self.quantity >= item
         return self.item == item if isinstance(item, type) else self.item == item.__class__
 
-    def contains(self, item: Item | type[Item] | _StackType, quantity: int = 1) -> bool:
+    def contains(self, item: Union["Stack", Item, type[Item]], quantity: int = 1) -> bool:
         if isinstance(item, Stack):
             quantity = item.quantity
             item = item.item
