@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Run Tests and Generate Coverage Report" type="CompoundRunConfigurationType">
+    <toRun name="Generate coverage report" type="PythonConfigurationType" />
+    <toRun name="Unittests" type="tests" />
+    <method v="2" />
+  </configuration>
+</component>
