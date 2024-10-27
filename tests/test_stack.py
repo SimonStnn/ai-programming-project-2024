@@ -127,3 +127,12 @@ class TestStack(unittest.TestCase):
         stack.join(stack2)
         self.assertEqual(stack, Stack(Log(), 64))
         self.assertEqual(stack2, Stack(Log(), 36))
+
+    def test_has(self):
+        stack = Stack(Log(), 5)
+        self.assertTrue(stack.has(Log))
+        self.assertTrue(stack.has(Log()))
+        self.assertTrue(stack.has(5))
+        self.assertFalse(stack.has(2))
+        self.assertFalse(stack.has(Stick))
+        self.assertFalse(stack.has(Stick()))
