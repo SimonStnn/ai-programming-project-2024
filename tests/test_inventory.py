@@ -30,9 +30,6 @@ class TestInventory(unittest.TestCase):
         self.assertEqual(inventory.get_item(0, 0), Stack(Stick(), 1))
 
     def test_get_item(self):
-        a = ['a', 'b', 'c', 'd']
-        print(a[5])
-
         inventory = Inventory(2, 1)
         self.assertEqual(inventory.get_item(0, 0), Stack())
         inventory.append(Log())
