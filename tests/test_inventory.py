@@ -50,3 +50,18 @@ class TestInventory(unittest.TestCase):
         inventory.append(Log())
         self.assertFalse(inventory.is_empty(0, 0))
         self.assertTrue(inventory.is_empty(0, 1))
+
+    def test_split_item(self):
+        inventory = Inventory(2, 1)
+        inventory.append(Stack(Log(), 2))
+        stack = inventory.split_item(0, 0)
+        self.assertEqual(stack, Stack(Log(), 1))
+        self.assertFalse(inventory.is_empty(0, 0))
+
+        inventory.append(Log())
+        stack = inventory.split_item(0, 0, 1)
+        self.assertEqual(stack, Stack(Log(), 1))
+        self.assertEqual(inventory.get_item(0, 0), Stack(Log(), 1))
+
+        self.assertRaises(ValueError, inventory.split_item, 0, 0, 2)
+        self.assertRaises(IndexError, inventory.split_item, 0, 2)
