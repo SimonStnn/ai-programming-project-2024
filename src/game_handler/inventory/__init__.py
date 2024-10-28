@@ -90,8 +90,8 @@ class Inventory:
     def contains(self, item: Stack | Item, quantity: int = 1) -> bool:
         """Check if the inventory contains an item"""
         if isinstance(item, Item):
-            item = Stack(item, 1)
-        return any(stack.contains(item, quantity) for stack in self.__inventory)
+            item = Stack(item, quantity)
+        return any(stack.contains(item) for stack in self.__inventory)
 
     def first_empty(self) -> tuple[int, int]:
         """Find the first empty slot in the inventory"""
