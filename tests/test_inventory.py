@@ -37,20 +37,6 @@ class TestInventory(unittest.TestCase):
         self.assertEqual(inventory.get_item(0, 1), Stack())
         self.assertRaises(IndexError, inventory.get_item, 0, 2)
 
-    def test_is_empty(self):
-        inventory = Inventory(2, 2)
-        self.assertTrue(inventory.is_empty())
-        inventory.append(Log())
-        self.assertFalse(inventory.is_empty())
-
-    def test_is_empty_at(self):
-        inventory = Inventory(2, 1)
-        self.assertTrue(inventory.is_empty(0, 0))
-        self.assertTrue(inventory.is_empty(0, 0))
-        inventory.append(Log())
-        self.assertFalse(inventory.is_empty(0, 0))
-        self.assertTrue(inventory.is_empty(0, 1))
-
     def test_split_item(self):
         inventory = Inventory(2, 1)
         inventory.append(Stack(Log(), 2))
@@ -65,3 +51,28 @@ class TestInventory(unittest.TestCase):
 
         self.assertRaises(ValueError, inventory.split_item, 0, 0, 2)
         self.assertRaises(IndexError, inventory.split_item, 0, 2)
+
+    def test_is_empty(self):
+        inventory = Inventory(2, 2)
+        self.assertTrue(inventory.is_empty())
+        inventory.append(Log())
+        self.assertFalse(inventory.is_empty())
+
+    def test_is_empty_at(self):
+        inventory = Inventory(2, 1)
+        self.assertTrue(inventory.is_empty(0, 0))
+        self.assertTrue(inventory.is_empty(0, 0))
+        inventory.append(Log())
+        self.assertFalse(inventory.is_empty(0, 0))
+        self.assertTrue(inventory.is_empty(0, 1))
+
+    def test_contains(self):
+        inventory = Inventory(2, 1)
+        self.assertFalse(inventory.contains(Log()))
+        inventory.append(Log())
+        self.assertTrue(inventory.contains(Log()))
+        self.assertTrue(inventory.contains(Log(), 1))
+        self.assertFalse(inventory.contains(Log(), 2))
+        self.assertTrue(inventory.contains(Stack(Log(), 1)))
+        self.assertFalse(inventory.contains(Stack(Log(), 2))
+
