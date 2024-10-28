@@ -18,6 +18,17 @@ class TestInventory(unittest.TestCase):
         self.assertEqual(inventory.get_item(0, 1), Stack(Stick(), 1))
         self.assertEqual(inventory.get_item(0, 1), Stack(Stick, 1))
 
+    def test_insert_item(self):
+        inventory = Inventory(2, 1)
+        inventory.insert_item(Log(), 0, 1)
+        self.assertEqual(inventory.get_item(0,1), Stack(Log(), 1))
+        inventory.insert_item(Log(), 0, 1)
+        self.assertEqual(inventory.get_item(0,1), Stack(Log(), 2))
+
+        self.assertRaises(ValueError, inventory.insert_item, Stick(), 0, 1)
+        inventory.insert_item(Stick(), 0, 0)
+        self.assertEqual(inventory.get_item(0,0), Stack(Stick(), 1))
+
     def test_is_empty(self):
         inventory = Inventory(2, 2)
         self.assertTrue(inventory.is_empty())
