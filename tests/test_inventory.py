@@ -21,13 +21,24 @@ class TestInventory(unittest.TestCase):
     def test_insert_item(self):
         inventory = Inventory(2, 1)
         inventory.insert_item(Log(), 0, 1)
-        self.assertEqual(inventory.get_item(0,1), Stack(Log(), 1))
+        self.assertEqual(inventory.get_item(0, 1), Stack(Log(), 1))
         inventory.insert_item(Log(), 0, 1)
-        self.assertEqual(inventory.get_item(0,1), Stack(Log(), 2))
+        self.assertEqual(inventory.get_item(0, 1), Stack(Log(), 2))
 
         self.assertRaises(ValueError, inventory.insert_item, Stick(), 0, 1)
         inventory.insert_item(Stick(), 0, 0)
-        self.assertEqual(inventory.get_item(0,0), Stack(Stick(), 1))
+        self.assertEqual(inventory.get_item(0, 0), Stack(Stick(), 1))
+
+    def test_get_item(self):
+        a = ['a', 'b', 'c', 'd']
+        print(a[5])
+
+        inventory = Inventory(2, 1)
+        self.assertEqual(inventory.get_item(0, 0), Stack())
+        inventory.append(Log())
+        self.assertEqual(inventory.get_item(0, 0), Stack(Log(), 1))
+        self.assertEqual(inventory.get_item(0, 1), Stack())
+        self.assertRaises(IndexError, inventory.get_item, 0, 2)
 
     def test_is_empty(self):
         inventory = Inventory(2, 2)

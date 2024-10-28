@@ -25,12 +25,12 @@ class Inventory:
     def __validate_column(self, column: int):
         """Validate the column index if it is within the inventory's width"""
         if column < 0 or column >= self.width:
-            raise ValueError("Column out of range")
+            raise IndexError("Column out of range")
 
     def __validate_row(self, row: int):
         """Validate the row index if it is within the inventory's height"""
         if row < 0 or row >= self.height:
-            raise ValueError("Row out of range")
+            raise IndexError("Row out of range")
 
     def __validate_index(self, row: int, column: int):
         """Validate the row and column index if it is within the inventory's width and height"""
