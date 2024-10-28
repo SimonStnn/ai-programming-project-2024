@@ -74,5 +74,12 @@ class TestInventory(unittest.TestCase):
         self.assertTrue(inventory.contains(Log(), 1))
         self.assertFalse(inventory.contains(Log(), 2))
         self.assertTrue(inventory.contains(Stack(Log(), 1)))
-        self.assertFalse(inventory.contains(Stack(Log(), 2))
+        self.assertFalse(inventory.contains(Stack(Log(), 2)))
 
+    def test_first_empty(self):
+        inventory = Inventory(2, 1)
+        self.assertEqual(inventory.first_empty(), (0, 0))
+        inventory.append(Log())
+        self.assertEqual(inventory.first_empty(), (0, 1))
+        inventory.insert_item(Stick(), 0, 1)
+        self.assertRaises(ValueError, inventory.first_empty)
