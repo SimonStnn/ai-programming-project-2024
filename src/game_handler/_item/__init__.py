@@ -12,11 +12,13 @@ class Item(ABC):
     """A game item"""
 
     @classmethod
+    @property
     def name(cls) -> str:
         """The name of the item"""
         return cls.__name__.replace("_", " ")
 
     @classmethod
+    @property
     def description(cls) -> str:
         """The description of the item"""
         return cls.__doc__
@@ -45,14 +47,16 @@ class Craftable(Item):
 
     @property
     @abstractmethod
-    def recipe(self) -> Recipe: ...
+    def recipe(self) -> Recipe:
+        ...
 
     @property
     def result(self) -> dict[type[Item], int]:
         return self.recipe.result
 
     def craft(self, player: "Player"):
-        if all(player.inventory.contains(ingredient, quantity) for ingredient, quantity in self.recipe.ingredients.items()):
+        if all(player.inventory.contains(ingredient, quantity) for ingredient, quantity in
+               self.recipe.ingredients.items()):
             for ingredient, quantity in self.recipe.ingredients.items():
                 player.inventory.remove_item(ingredient, quantity)
             player.inventory.append(self.recipe.result)
