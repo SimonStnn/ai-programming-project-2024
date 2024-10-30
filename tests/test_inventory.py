@@ -36,6 +36,7 @@ class TestInventory(unittest.TestCase):
         self.assertEqual(inventory.get_item(0, 0), Stack(Log(), 1))
         self.assertEqual(inventory.get_item(0, 1), Stack())
         self.assertRaises(IndexError, inventory.get_item, 0, 2)
+        self.assertRaises(IndexError, inventory.get_item, 3, 0)
 
     def test_remove_item(self):
         inventory = Inventory(2, 1)
