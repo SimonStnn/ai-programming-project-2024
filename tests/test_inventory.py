@@ -99,3 +99,35 @@ class TestInventory(unittest.TestCase):
         self.assertEqual(inventory.find(Log()), (0, 0))
         inventory.insert_item(Stick(), 0, 1)
         self.assertEqual(inventory.find(Stick()), (0, 1))
+
+    def test_get_row(self):
+        inventory = Inventory(2, 2)
+        self.assertEqual(inventory.get_row(0), [Stack(), Stack()])
+        inventory.append(Log())
+        self.assertEqual(inventory.get_row(0), [Stack(Log(), 1), Stack()])
+        inventory.append(Stick())
+        self.assertEqual(inventory.get_row(0), [Stack(Log(), 1), Stack(Stick(), 1)])
+
+        self.assertEqual(inventory.get_row(1), [Stack(), Stack()])
+        inventory.append(Log())
+        self.assertEqual(inventory.get_row(1), [Stack(), Stack()])
+        inventory.insert_item(Log(), 1, 1)
+        self.assertEqual(inventory.get_row(1), [Stack(), Stack(Log(), 1)])
+
+        self.assertRaises(IndexError, inventory.get_row, 2)
+
+    def test_get_column(self):
+        inventory = Inventory(2, 2)
+        self.assertEqual(inventory.get_column(0), [Stack(), Stack()])
+        inventory.append(Log())
+        self.assertEqual(inventory.get_column(0), [Stack(Log(), 1), Stack()])
+        inventory.append(Stick())
+        self.assertEqual(inventory.get_column(0), [Stack(Log(), 1), Stack()])
+
+        self.assertEqual(inventory.get_column(1), [Stack(Stick(), 1), Stack()])
+        inventory.append(Log())
+        self.assertEqual(inventory.get_column(1), [Stack(Stick(), 1), Stack()])
+        inventory.insert_item(Log(), 1, 1)
+        self.assertEqual(inventory.get_column(1), [Stack(Stick(), 1), Stack(Log(), 1)])
+
+        self.assertRaises(IndexError, inventory.get_column, 2)
