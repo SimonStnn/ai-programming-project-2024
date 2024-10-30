@@ -131,3 +131,13 @@ class TestInventory(unittest.TestCase):
         self.assertEqual(inventory.get_column(1), [Stack(Stick(), 1), Stack(Log(), 1)])
 
         self.assertRaises(IndexError, inventory.get_column, 2)
+
+    def test_str(self):
+        inventory = Inventory(2, 2)
+        target = "Stack(item=None, quantity=0) | Stack(item=None, quantity=0)\nStack(item=None, quantity=0) | Stack(item=None, quantity=0)"
+
+        self.assertEqual(str(inventory), target)
+
+    def test_repr(self):
+        inventory = Inventory(2, 2)
+        self.assertEqual(str(inventory), repr(inventory))
