@@ -90,3 +90,11 @@ class TestInventory(unittest.TestCase):
         self.assertEqual(inventory.first_empty(), (0, 1))
         inventory.insert_item(Stick(), 0, 1)
         self.assertRaises(ValueError, inventory.first_empty)
+
+    def test_find(self):
+        inventory = Inventory(2, 1)
+        self.assertRaises(ValueError, inventory.find, Log())
+        inventory.append(Log())
+        self.assertEqual(inventory.find(Log()), (0, 0))
+        inventory.insert_item(Stick(), 0, 1)
+        self.assertEqual(inventory.find(Stick()), (0, 1))
