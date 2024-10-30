@@ -5,7 +5,7 @@ from src.game_handler.items import Item, Log, Stick
 
 
 class Test_Item(Item):
-    ...
+    """This is a test item"""
 
 
 class TestItem(unittest.TestCase):
@@ -16,6 +16,13 @@ class TestItem(unittest.TestCase):
     def test_item_repr(self):
         item = Log()
         self.assertEqual(repr(item), "Log()")
+
+    def test_eq(self):
+        item = Log()
+        self.assertEqual(item, Log())
+        self.assertEqual(item, Log)
+        self.assertNotEqual(item, Stick())
+        self.assertNotEqual(item, Stick)
 
     def test_item_name(self):
         item = Log()
