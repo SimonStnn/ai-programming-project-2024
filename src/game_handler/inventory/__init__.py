@@ -103,7 +103,7 @@ class Inventory:
     def find(self, item: Item | type[Item]) -> tuple[int, int]:
         """Find the first occurrence of an item in the inventory"""
         for i, stack in enumerate(self.__inventory):
-            if stack.item == item if isinstance(item, type) else type(item):
+            if stack.item == (item if isinstance(item, type) else type(item)):
                 return divmod(i, self.width)
         raise ValueError("Item not found")
 
