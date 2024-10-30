@@ -29,3 +29,11 @@ class TestItem(unittest.TestCase):
         self.assertEqual(item.name, Test_Item.__name__.replace("_", " "))
         self.assertEqual(Test_Item.name, "Test Item")
         self.assertEqual(Test_Item.name, Test_Item.__name__.replace("_", " "))
+
+    def test_item_description(self):
+        item = Log()
+        self.assertEqual(item.description, Log.__doc__)
+
+        item = Test_Item()
+        self.assertEqual(item.description, "This is a test item")
+        self.assertEqual(item.description, Test_Item.__doc__)
