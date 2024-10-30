@@ -92,6 +92,9 @@ class TestStack(unittest.TestCase):
         stack = Stack(Log(), 63, capacity=64)
         self.assertRaises(ValueError, stack.add, 2)
 
+        stack.add(1)
+        self.assertRaises(ValueError, stack.add, 1)
+
     def test_remove(self):
         stack = Stack(Log(), 2)
         stack.remove(1)
