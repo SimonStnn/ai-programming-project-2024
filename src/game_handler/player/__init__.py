@@ -1,37 +1,49 @@
 """The player class"""
+from typing import TypedDict
 from pygame.math import Vector2
 from pygame.surface import Surface
+from pygame.sprite import Sprite
+from pygame.key import ScancodeWrapper
+from pygame.locals import K_w, K_s, K_a, K_d, K_z, K_q, K_d
+
 from src.game_handler.inventory import Inventory
 from src.game_handler.items import Log
-from pygame.sprite import Sprite
-from pygame.locals import K_w, K_s, K_a, K_d, K_z, K_q, K_d
 from src.functions import get_keyboard_layout
+
+
+class PlayerStats(TypedDict):
+    health: int
+    hunger: int
+    score: int
+
 
 class Player(Sprite):
     """The player"""
-    _health: int
-    _hunger: int
+    stats: PlayerStats = {
+        "health": 100,
+        "hunger": 100,
+        "score": 0,
+    }
     inventory: Inventory
     movement: Vector2 = Vector2(0, 0)
-
 
     @property
     def health(self):
         """The player's health"""
-        return self._health
+        return self.stats["health"]
 
     @health.setter
     def health(self, value: int):
-        self._health = max(0, min(value, 100))
+        self.stats["health"] = max(0, min(value, 100))
 
     @property
     def hunger(self):
         """The player's hunger"""
-        return self._hunger
+        return self.stats["hunger"]
 
     @hunger.setter
     def hunger(self, value: int):
-        self._hunger = max(0, min(value, 100))
+        self.stats["hunger"] = max(0, min(value, 100))
 
     def __init__(self, *, health: int = 100, hunger: int = 100):
         super().__init__()
@@ -42,7 +54,15 @@ class Player(Sprite):
         self.health = health
         self.hunger = hunger
 
-    def events(self, event):
+    def increment_score(self, score: int):
+        """Increment the player's score"""
+        self.stats["score"] += score
+
+    def get_score(self):
+        """Get the player's score"""
+        return self.stats["score"]
+
+    def events(self, event: ScancodeWrapper):
         # movements
         self.movement = Vector2(0, 0)
         if event[K_w if get_keyboard_layout() == "QWERTY" else K_z]:
@@ -56,7 +76,7 @@ class Player(Sprite):
 
         self.movement = self.movement.normalize() if self.movement.length() > 0 else self.movement
 
-    def update(self, delta):
+    def update(self, delta: int | float):
         self.rect.move_ip(self.movement * delta * 250)
 
     def update_scale(self, resolution):
