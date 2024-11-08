@@ -59,6 +59,11 @@ class Player(Sprite):
     def update(self, delta):
         self.rect.move_ip(self.movement * delta * 250)
 
+    def update_scale(self, resolution):
+        #scale the player
+        self.image = Surface((resolution[0]//32, resolution[1]//32))
+        self.image.fill("Red")
+
     def take_damage(self, damage: int):
         """Take player damage"""
         self.health -= damage

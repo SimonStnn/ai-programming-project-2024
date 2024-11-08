@@ -12,3 +12,7 @@ class VisibleSprites(Group):
 
 
             sprite.rect.clamp_ip(sprite.rect)
+
+    def update_scale(self, resolution):
+        for sprite in self.sprites():
+            sprite.update_scale(resolution)

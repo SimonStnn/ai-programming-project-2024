@@ -9,8 +9,7 @@ class Window:
 
     def __init__(self):
         self.running = False
-        self.flags = pygame.HWACCEL | pygame.DOUBLEBUF
-        self.screen = pygame.display.set_mode(RESOLUTIONS[0], self.flags)
+        self.screen = pygame.display.set_mode(RESOLUTIONS[0], self.__flags)
         self.clock = pygame.Clock()
         self.vsync = False
         self.scenes = {
@@ -19,11 +18,34 @@ class Window:
         }
         self.current_scene = self.scenes["MainGame"]
         self.delta = 0
+        self.vsync = False
 
 
+    def set_vsync(self, vsync: bool):
+        self.vsync = vsync
+        self.screen = pygame.display.set_mode(RESOLUTIONS[0], self.__flags)
+        self.clock = pygame.time.Clock()
+
+    @property
+    def __flags(self):
+        return pygame.DOUBLEBUF | pygame.HWSURFACE | pygame.FULLSCREEN
+
+    def update_scale(self, resolution):
+        for scene in self.scenes.values():
+            if hasattr(scene, "update_scale"):
+                scene.update_scale(resolution)
+
+
+    @property
+    def flags(self):
+        return self.__flags
+
+    @property
+    def fps(self):
+        return pygame.display.get_desktop_refresh_rates()[0] if self.vsync else 60
 
     def pre_draw_update(self):
-        self.delta = self.clock.tick(pygame.display.get_desktop_refresh_rates()[0] if self.vsync else 60) / 1000.0
+        self.delta = self.clock.tick(self.fps) / 1000.0
         self.current_scene.delta = self.delta
         self.current_scene.pre_draw_update()
 
@@ -54,9 +76,6 @@ class Window:
     def swap_scene(self, scene):
         self.current_scene = scene
         self.current_scene.screen = self.screen
-        if isinstance(scene, MainGame):
-            self.current_scene.reset_map()
-
 
 
     @staticmethod

@@ -82,8 +82,10 @@ class SettingsWindow:
         # maybe later implement a data saving system here
 
     def pressed_fullscreen_button(self):
-        self.master.flags ^= pygame.FULLSCREEN
-        self.master.screen = pygame.display.set_mode(RESOLUTIONS[self.current_resolution], self.master.flags)
+
+        pygame.display.toggle_fullscreen()
+        # self.master.screen = pygame.display.set_mode(RESOLUTIONS[self.current_resolution], self.master.screen.get_flags() ^ pygame.FULLSCREEN)
+
 
     def pressed_resolution_button(self):
         self.current_resolution = (self.current_resolution + 1) % len(RESOLUTIONS)
@@ -91,12 +93,14 @@ class SettingsWindow:
         self.change_resolution(RESOLUTIONS[self.current_resolution])
 
     def change_resolution(self, resolution):
-        # check if currently in fullscreen
-        if self.master.screen.get_flags() & pygame.FULLSCREEN: self.master.flags |= pygame.FULLSCREEN
-        else: self.master.flags &= ~pygame.FULLSCREEN
-        self.master.screen = pygame.display.set_mode(resolution, self.master.flags)
+        # check if currently in fullscreen mode
+        self.master.screen = pygame.display.set_mode(
+            resolution,
+            self.master.flags | pygame.FULLSCREEN if self.master.screen.get_flags() & pygame.FULLSCREEN else self.master.flags & ~pygame.FULLSCREEN
+        )
         self.master.current_scene.screen = self.master.screen
         self.create_ui()
+        self.master.update_scale(resolution)
 
 
     def pre_draw_update(self):

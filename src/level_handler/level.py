@@ -52,6 +52,10 @@ class Level:
         for x,tile in enumerate(self.map):
             screen.blit(tile.image, tile.rect)
 
+    def update_size(self, blocksize):
+        for tile in self.map:
+            tile.update_size(blocksize)
+
     def __str__(self):
         return str(self.map)
 
