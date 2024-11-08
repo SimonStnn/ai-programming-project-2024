@@ -3,6 +3,7 @@ from typing import TypedDict
 from pygame.math import Vector2
 from pygame.surface import Surface
 from pygame.sprite import Sprite
+from pygame.key import ScancodeWrapper
 from pygame.locals import K_w, K_s, K_a, K_d, K_z, K_q, K_d
 
 from src.game_handler.inventory import Inventory
@@ -61,7 +62,7 @@ class Player(Sprite):
         """Get the player's score"""
         return self.stats["score"]
 
-    def events(self, event):
+    def events(self, event: ScancodeWrapper):
         # movements
         self.movement = Vector2(0, 0)
         if event[K_w if get_keyboard_layout() == "QWERTY" else K_z]:
@@ -75,7 +76,7 @@ class Player(Sprite):
 
         self.movement = self.movement.normalize() if self.movement.length() > 0 else self.movement
 
-    def update(self, delta):
+    def update(self, delta: int | float):
         self.rect.move_ip(self.movement * delta * 250)
 
     def take_damage(self, damage: int):
