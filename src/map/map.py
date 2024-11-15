@@ -49,28 +49,26 @@ def seed_map(_map: ndarray[Any, dtype], start_pos: list[int], chunk_range: list[
     while count_zeros != 0:
         for x in range(a, b):
             for y in range(c, d):
-                if m[min(max(x, 0), m.shape[0]-1), min(max(y, 0), m.shape[1]-1)] != 0: continue
+                if m[min(max(x, 0), m.shape[0] - 1), min(max(y, 0), m.shape[1] - 1)] != 0: continue
 
-                block_counts = {block: 0 for block in blocks}
+                block_counts: dict[int, float] = {block: 0 for block in blocks}
 
-                for i in range(-1, 2):
-                    for j in range(-1, 2):
-                        if i == 0 and j == 0:
-                            continue
+                for dx, dy in [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]:
+                    _X = min(max(x + dx, 0), m.shape[0] - 1)
+                    _Y = min(max(y + dy, 0), m.shape[1] - 1)
 
-                        _X = min(max(x + i, 0), m.shape[0] - 1)
-                        _Y = min(max(y + j, 0), m.shape[1] - 1)
+                    block_counts[m[_X, _Y]] += 1
 
-                        block_counts[m[_X, _Y]] += 1
+                # Calculate weights
+                total_count = sum(block_counts.values())
+                block_weights = {
+                    block: max(MIN_WEIGHT, count / total_count) if total_count > 0 else MIN_WEIGHT
+                    for block, count in block_counts.items()
+                }
 
-                total = sum(block_counts.values())
-                block_weights = {block: max(MIN_WEIGHT, block_counts[block] / total) if total != 0 else MIN_WEIGHT for
-                                 block in blocks}
-                total_block_weights = sum(block_weights.values())
-                for block in block_weights:
-                    block_weights[block] /= total_block_weights
-
-                weights = [block_weights[block] for block in blocks]
+                # Normalize weights
+                total_weight = sum(block_weights.values())
+                weights = [block_weights[block] / total_weight for block in blocks]
 
                 m[x, y] = get_random_tile(weights)
 
