@@ -3,7 +3,9 @@ from pygame.key import get_pressed
 from src.game_handler.player import Player
 from src.game_handler.groups.visible_sprites import VisibleSprites
 from src.map import TILE_TRANSLATIONS
-from src.map.map import generate_empty_map, seed_map, get_map_chunk
+from src.map.map import generate_empty_map, seed_map, get_map_chunk, Tile
+
+RENDER_SIZE = (32, 32)
 
 
 class MainGame:
@@ -15,7 +17,7 @@ class MainGame:
         self.master = master
         self.player = Player()
         self.my_map = generate_empty_map([1000, 1000])
-        self.start_pos = [self.my_map.shape[0]//2, self.my_map.shape[1]//2]
+        self.start_pos = [self.my_map.shape[0] // 2, self.my_map.shape[1] // 2]
         self.visible_sprites = VisibleSprites(player=self.player)
         self.delta = 0
 
@@ -28,18 +30,21 @@ class MainGame:
 
     def draw(self):
         self.master.screen.fill("White")
-        chunk = get_map_chunk(self.my_map, (self.start_pos[0]+ self.player.pos[0], self.start_pos[1] + self.player.pos[1]), (100, 100))
+        chunk = get_map_chunk(self.my_map,
+                              (self.start_pos[0] + self.player.pos[0], self.start_pos[1] + self.player.pos[1]),
+                              RENDER_SIZE)
         for x in range(chunk.shape[0]):
             for y in range(chunk.shape[1]):
-                tile = TILE_TRANSLATIONS[chunk[x, y]]
-                img = pygame.transform.smoothscale(pygame.image.load(tile["sprite_url"]) , (32, 32))
-                self.master.screen.blit(img, (x * 32, y * 32))
+                tile: Tile = TILE_TRANSLATIONS[chunk[x, y]]
+                self.master.screen.blit(tile["sprite"], (x * 16, y * 16))
 
         self.visible_sprites.draw(self.master.screen)
 
     def post_draw_update(self):
         self.delta = self.master.clock.tick(self.master.fps) / 1000
-        self.my_map = seed_map(self.my_map, (self.start_pos[0]+ self.player.pos[0], self.start_pos[1] + self.player.pos[1]), (100, 100))
+        self.my_map = seed_map(self.my_map,
+                               (self.start_pos[0] + self.player.pos[0], self.start_pos[1] + self.player.pos[1]),
+                               RENDER_SIZE)
         # np.savetxt('./src/map/map.txt', self.my_map, fmt='%d')
 
     def process_events(self, event):

@@ -1,3 +1,4 @@
+import pygame
 from typing import TypedDict
 from src.functions import img_path
 
@@ -5,14 +6,14 @@ from src.functions import img_path
 class Tile(TypedDict):
     name: str
     level: int
-    sprite_url: str
+    sprite: pygame.Surface
 
 
 def get_tile(name: str, ext: str = ".jpg", level: int = 1) -> Tile:
     return {
         "name": name,
         "level": level,
-        "sprite_url": img_path(f"Tileset/{name}{ext}") or "Tileset/missing.png"  # type: ignore
+        "sprite": pygame.image.load(img_path(f"Tileset/{name}{ext}") or "Tileset/missing.png")  # type: ignore
     }
 
 

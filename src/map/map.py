@@ -3,7 +3,7 @@ from typing import Any
 import numpy as np
 from numpy import ndarray, dtype, signedinteger
 
-from src.map.tiles import TILE_TRANSLATIONS
+from src.map.tiles import TILE_TRANSLATIONS, Tile
 
 MIN_WEIGHT = 0.01
 TILE_WEIGHTS = {
