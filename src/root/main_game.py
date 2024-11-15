@@ -2,7 +2,9 @@ import pygame, numpy as np
 from pygame.key import get_pressed
 from src.game_handler.player import Player
 from src.game_handler.groups.visible_sprites import VisibleSprites
+from src.map import TILE_TRANSLATIONS
 from src.map.map import generate_empty_map, seed_map, get_map_chunk
+
 
 class MainGame:
     player: Player
@@ -17,7 +19,6 @@ class MainGame:
         self.visible_sprites = VisibleSprites(player=self.player)
         self.delta = 0
 
-
     def pre_draw_update(self):
         self.visible_sprites.update(self.delta)
         self.player.events(get_pressed())
@@ -28,16 +29,11 @@ class MainGame:
     def draw(self):
         self.master.screen.fill("White")
         chunk = get_map_chunk(self.my_map, (self.start_pos[0]+ self.player.pos[0], self.start_pos[1] + self.player.pos[1]), (32, 32))
-        print(chunk.shape)
-        # draw map
         for x in range(chunk.shape[0]):
             for y in range(chunk.shape[1]):
-                if chunk[x, y] == 1:
-                    pygame.draw.rect(self.master.screen, "Green", (x*32, y*32, 32, 32))
-                elif chunk[x, y] == 2:
-                    pygame.draw.rect(self.master.screen, "Yellow", (x*32, y*32, 32, 32))
-                elif chunk[x, y] == 3:
-                    pygame.draw.rect(self.master.screen, "Blue", (x*32, y*32, 32, 32))
+                tile = TILE_TRANSLATIONS[chunk[x, y]]
+                img = pygame.image.load(tile["sprite_url"])
+                self.master.screen.blit(img, (x * 16, y * 16))
 
         self.visible_sprites.draw(self.master.screen)
 

@@ -8,7 +8,7 @@ class Tile(TypedDict):
     sprite_url: str
 
 
-def get_tile(name: str, ext: str = ".png", level: int = 1) -> Tile:
+def get_tile(name: str, ext: str = ".jpg", level: int = 1) -> Tile:
     return {
         "name": name,
         "level": level,
@@ -17,6 +17,7 @@ def get_tile(name: str, ext: str = ".png", level: int = 1) -> Tile:
 
 
 TILE_TRANSLATIONS: dict[int, Tile] = {
+    0: get_tile(name="dirt"),
     1: get_tile(name="grass"),
     2: get_tile(name="sand"),
     3: get_tile(name="water", level=0)
