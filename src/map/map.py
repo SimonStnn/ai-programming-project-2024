@@ -41,8 +41,7 @@ def seed_map(_map: ndarray[Any, dtype], start_pos: list[int], chunk_range: list[
     while count_zeros != 0:
         for x in range(a, b):
             for y in range(c, d):
-                if m[x, y] != 0:
-                    continue
+                if m[min(max(x, 0), m.shape[0]-1), min(max(y, 0), m.shape[1]-1)] != 0: continue
 
                 grass_count = 0
                 sand_count = 0
@@ -88,12 +87,17 @@ def seed_map(_map: ndarray[Any, dtype], start_pos: list[int], chunk_range: list[
     return m
 
 def get_map_chunk(_map: ndarray[Any, dtype], start_pos: list[int], chunk_range: list[int]) -> ndarray[Any, dtype]:
-    return _map[start_pos[0]:start_pos[0]+chunk_range[0], start_pos[1]:start_pos[1]+chunk_range[1]]
+    top_left = [max(0, start_pos[0]-chunk_range[0]//2), max(0, start_pos[1]-chunk_range[1]//2)]
+    bottom_right = [min(_map.shape[0], start_pos[0]+chunk_range[0]//2), min(_map.shape[1], start_pos[1]+chunk_range[1]//2)]
+    return _map[top_left[0]:bottom_right[0], top_left[1]:bottom_right[1]]
 
 
 if __name__ == '__main__':
     map = generate_empty_map([100, 100])
     map = seed_map(map, (map.shape[0]//2, map.shape[1]//2), (32,32))
     map = seed_map(map, (map.shape[0]//2+16, map.shape[1]//2), (16,16))
+
+    chunk = get_map_chunk(map, (map.shape[0],map.shape[1]//2), (32, 32))
+    print(chunk)
     # write to txt file
     np.savetxt('map.txt', map, fmt='%d')

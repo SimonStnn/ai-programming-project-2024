@@ -1,5 +1,7 @@
 """The player class"""
 from typing import TypedDict
+
+import pygame
 from pygame.math import Vector2
 from pygame.surface import Surface
 from pygame.sprite import Sprite
@@ -44,6 +46,10 @@ class Player(Sprite):
     @hunger.setter
     def hunger(self, value: int):
         self.stats["hunger"] = max(0, min(value, 100))
+
+    @property
+    def pos(self):
+        return self.rect.x, self.rect.y
 
     def __init__(self, *, health: int = 100, hunger: int = 100):
         super().__init__()
