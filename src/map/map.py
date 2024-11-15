@@ -34,22 +34,23 @@ def get_random_tile(weights=None) -> int:
 def seed_map(_map: ndarray[Any, dtype], start_pos: list[int], chunk_range: list[int]) -> ndarray[Any, dtype]:
     m = _map.copy()
     count_zeros = np.count_nonzero(
-        m[start_pos[0]:start_pos[0] + chunk_range[0], start_pos[1]:start_pos[1] + chunk_range[1]] == 0)
+        m[max(start_pos[0], 0):max(start_pos[0] + chunk_range[0], 0), max(start_pos[1], 0):max(start_pos[1] + chunk_range[1], 0)] == 0)
     x_offset = chunk_range[0] // 2
     y_offset = chunk_range[1] // 2
 
-    a = start_pos[0] - x_offset
-    b = start_pos[0] + x_offset
+    a = max(start_pos[0] - x_offset, 0)
+    b = max(start_pos[0] + x_offset, 0)
 
-    c = start_pos[1] - y_offset
-    d = start_pos[1] + y_offset
+    c = max(start_pos[1] - y_offset, 0)
+    d = max(start_pos[1] + y_offset, 0)
 
     blocks = TILE_TRANSLATIONS.keys()
 
     while count_zeros != 0:
-        for x in range(a, b):
-            for y in range(c, d):
-                if m[min(max(x, 0), m.shape[0] - 1), min(max(y, 0), m.shape[1] - 1)] != 0: continue
+        for x in range(max(a, 0), min(b, m.shape[0])):
+            for y in range(max(c, 0), min(d, m.shape[1])):
+                if m[x, y] != 0:
+                    continue
 
                 block_counts: dict[int, float] = {block: 0 for block in blocks}
 
@@ -70,15 +71,22 @@ def seed_map(_map: ndarray[Any, dtype], start_pos: list[int], chunk_range: list[
                 total_weight = sum(block_weights.values())
                 weights = [block_weights[block] / total_weight for block in blocks]
 
-                m[x, y] = get_random_tile(weights)
+                m[min(max(x, 0), m.shape[0]-1), min(max(y, 0), m.shape[1]-1)] = get_random_tile(weights)
 
         count_zeros = np.count_nonzero(m[a:b, c:d] == 0)
     return m
 
-
 def get_map_chunk(_map: ndarray[Any, dtype], start_pos: list[int], chunk_range: list[int]) -> ndarray[Any, dtype]:
-    return _map[start_pos[0]:start_pos[0] + chunk_range[0], start_pos[1]:start_pos[1] + chunk_range[1]]
+    x_offset = chunk_range[0] // 2
+    y_offset = chunk_range[1] // 2
 
+    a = max(start_pos[0] - x_offset, 0)
+    b = min(start_pos[0] + x_offset + 1, _map.shape[0])
+
+    c = max(start_pos[1] - y_offset, 0)
+    d = min(start_pos[1] + y_offset + 1, _map.shape[1])
+
+    return _map[a:b, c:d]
 
 if __name__ == '__main__':
     map = generate_empty_map([100, 100])
