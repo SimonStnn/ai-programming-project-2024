@@ -18,7 +18,6 @@ class Window:
         }
         self.current_scene = self.scenes["MainGame"]
         self.delta = 0
-        self.vsync = False
 
 
     def set_vsync(self, vsync: bool):
