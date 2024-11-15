@@ -57,11 +57,14 @@ def seed_map(_map: ndarray[Any, dtype], start_pos: list[int], chunk_range: list[
                         if i == 0 and j == 0:
                             continue
 
-                        if m[x+i, y+j] == 1:
+                        _X = min(max(x+i, 0), m.shape[0]-1)
+                        _Y = min(max(y+j, 0), m.shape[1]-1)
+
+                        if m[_X, _Y] == 1:
                             grass_count += 1
-                        elif m[x+i, y+j] == 2:
+                        elif m[_X, _Y] == 2:
                             sand_count += 1
-                        elif m[x+i, y+j] == 3:
+                        elif m[_X, _Y] == 3:
                             water_count += 1
 
                 total = grass_count + sand_count + water_count
@@ -87,6 +90,9 @@ def seed_map(_map: ndarray[Any, dtype], start_pos: list[int], chunk_range: list[
 
         count_zeros = np.count_nonzero(m[a:b, c:d] == 0)
     return m
+
+def get_map_chunk(_map: ndarray[Any, dtype], start_pos: list[int], chunk_range: list[int]) -> ndarray[Any, dtype]:
+    return _map[start_pos[0]:start_pos[0]+chunk_range[0], start_pos[1]:start_pos[1]+chunk_range[1]]
 
 
 if __name__ == '__main__':

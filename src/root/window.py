@@ -28,7 +28,7 @@ class Window:
 
     @property
     def __flags(self):
-        return pygame.DOUBLEBUF | pygame.HWSURFACE | pygame.FULLSCREEN
+        return pygame.DOUBLEBUF | pygame.HWSURFACE
 
     def update_scale(self, resolution):
         for scene in self.scenes.values():
