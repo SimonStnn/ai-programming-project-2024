@@ -1,7 +1,6 @@
 """The player class"""
 from typing import TypedDict
 
-import pygame
 from pygame.math import Vector2
 from pygame.surface import Surface
 from pygame.sprite import Sprite

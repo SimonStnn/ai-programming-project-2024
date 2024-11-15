@@ -1,6 +1,6 @@
 import pygame, numpy as np
 from pygame.key import get_pressed
-from src.game_handler.player import Player
+from src.game_handler.entity import Player
 from src.game_handler.groups.visible_sprites import VisibleSprites
 from src.map import TILE_TRANSLATIONS
 from src.map.map import generate_empty_map, seed_map, get_map_chunk, Tile
