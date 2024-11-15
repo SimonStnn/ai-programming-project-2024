@@ -28,18 +28,18 @@ class MainGame:
 
     def draw(self):
         self.master.screen.fill("White")
-        chunk = get_map_chunk(self.my_map, (self.start_pos[0]+ self.player.pos[0], self.start_pos[1] + self.player.pos[1]), (32, 32))
+        chunk = get_map_chunk(self.my_map, (self.start_pos[0]+ self.player.pos[0], self.start_pos[1] + self.player.pos[1]), (100, 100))
         for x in range(chunk.shape[0]):
             for y in range(chunk.shape[1]):
                 tile = TILE_TRANSLATIONS[chunk[x, y]]
-                img = pygame.image.load(tile["sprite_url"])
-                self.master.screen.blit(img, (x * 16, y * 16))
+                img = pygame.transform.smoothscale(pygame.image.load(tile["sprite_url"]) , (32, 32))
+                self.master.screen.blit(img, (x * 32, y * 32))
 
         self.visible_sprites.draw(self.master.screen)
 
     def post_draw_update(self):
         self.delta = self.master.clock.tick(self.master.fps) / 1000
-        self.my_map = seed_map(self.my_map, (self.start_pos[0]+ self.player.pos[0], self.start_pos[1] + self.player.pos[1]), (32, 32))
+        self.my_map = seed_map(self.my_map, (self.start_pos[0]+ self.player.pos[0], self.start_pos[1] + self.player.pos[1]), (100, 100))
         # np.savetxt('./src/map/map.txt', self.my_map, fmt='%d')
 
     def process_events(self, event):
