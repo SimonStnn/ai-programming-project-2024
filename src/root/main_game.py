@@ -5,7 +5,6 @@ from src.game_handler.groups.visible_sprites import VisibleSprites
 from src.map import TILE_TRANSLATIONS
 from src.map.map import generate_empty_map, seed_map, get_map_chunk, Tile
 
-RENDER_SIZE = (32, 32)
 
 
 class MainGame:
@@ -30,21 +29,27 @@ class MainGame:
 
     def draw(self):
         self.master.screen.fill("White")
-        chunk = get_map_chunk(self.my_map,
-                              (self.start_pos[0] + self.player.pos[0], self.start_pos[1] + self.player.pos[1]),
-                              RENDER_SIZE)
+        chunk = get_map_chunk(
+            self.my_map,
+            (self.start_pos[0] + self.player.pos[0], self.start_pos[1] + self.player.pos[1]),
+            (int(pygame.display.get_window_size()[0] // 32 * 1.25), int(pygame.display.get_window_size()[1] // 32 *1.25))
+        )
+        # in this case the chunk is [25, 18]
         for x in range(chunk.shape[0]):
             for y in range(chunk.shape[1]):
                 tile: Tile = TILE_TRANSLATIONS[chunk[x, y]]
-                self.master.screen.blit(tile["sprite"], (x * 16, y * 16))
+                self.master.screen.blit(tile["sprite"], (x * 32, y * 32))
 
         self.visible_sprites.draw(self.master.screen)
 
     def post_draw_update(self):
         self.delta = self.master.clock.tick(self.master.fps) / 1000
-        self.my_map = seed_map(self.my_map,
-                               (self.start_pos[0] + self.player.pos[0], self.start_pos[1] + self.player.pos[1]),
-                               RENDER_SIZE)
+        self.my_map = seed_map(
+            self.my_map,
+            (self.start_pos[0] + self.player.pos[0], self.start_pos[1] + self.player.pos[1]),
+            (int(pygame.display.get_window_size()[0] // 32 * 1.25), int( pygame.display.get_window_size()[1] // 32*1.25))
+
+        )
         # np.savetxt('./src/map/map.txt', self.my_map, fmt='%d')
 
     def process_events(self, event):

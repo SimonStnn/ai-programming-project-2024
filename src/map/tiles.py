@@ -13,7 +13,7 @@ def get_tile(name: str, ext: str = ".jpg", level: int = 1) -> Tile:
     return {
         "name": name,
         "level": level,
-        "sprite": pygame.image.load(img_path(f"Tileset/{name}{ext}") or "Tileset/missing.png")  # type: ignore
+        "sprite": pygame.transform.smoothscale(pygame.image.load(img_path(f"Tileset/{name}{ext}") or "Tileset/missing.png"), (32,32))  # type: ignore
     }
 
 
