@@ -1,13 +1,9 @@
+import time
 from typing import Any
-
 import numpy as np
 from numpy import ndarray, dtype, signedinteger
-import time
-TILE_TRANSLATIONS = {
-    1: 'grass',
-    2: 'sand',
-    3: 'water',
-}
+
+from src.map.tiles import TILE_TRANSLATIONS
 
 TILE_WEIGHTS = {
     1: 1/3,
