@@ -1,5 +1,5 @@
 from src.root import Window
-import pygame, pygame_gui
+import pygame
 
 pygame.init()
 
