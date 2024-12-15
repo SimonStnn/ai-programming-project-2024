@@ -12,8 +12,8 @@ class CameraGroup(pygame.sprite.Group):
 
     def update(self, *args):
         super().update(*args)
-        self.offset.x = min(max(self.player.rect.centerx - self.screen_width // 2, 0), self.map_width - self.screen_width)
-        self.offset.y = min(max(self.player.rect.centery - self.screen_height // 2, 0), self.map_height - self.screen_height)
+        self.offset.x = max(0, min(self.player.rect.centerx - self.screen_width // 2, self.map_width - self.screen_width))
+        self.offset.y = max(0, min(self.player.rect.centery - self.screen_height // 2, self.map_height - self.screen_height))
 
     def draw(self, surface):
         for sprite in self.sprites():

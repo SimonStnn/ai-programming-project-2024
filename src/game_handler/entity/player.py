@@ -49,6 +49,14 @@ class Player(Sprite):
     @property
     def pos(self):
         return self.rect.x, self.rect.y
+    
+    def take_damage(self, damage: int):
+        """Take player damage"""
+        self.health -= damage
+        if self.health <= 0:
+            # self.kill()  # Assuming you want to remove the player when health is 0
+            ...
+
 
     def __init__(self, *, health: int = 100, hunger: int = 100):
         super().__init__()
@@ -82,17 +90,12 @@ class Player(Sprite):
         self.movement = self.movement.normalize() if self.movement.length() > 0 else self.movement
 
     def update(self, delta: int | float):
-        self.rect.move_ip(self.movement * delta * 250)
-        print(self.rect)
+        self.rect.move_ip(self.movement * delta * 100)
 
     def update_scale(self, resolution):
         #scale the player
         self.image = Surface((resolution[0]//32, resolution[1]//32))
         self.image.fill("Red")
-
-    def take_damage(self, damage: int):
-        """Take player damage"""
-        self.health -= damage
 
     def heal(self, health: int):
         """Heal the player"""
@@ -100,6 +103,10 @@ class Player(Sprite):
 
     def __str__(self):
         return f"Player Health: {self.health}, Hunger:{self.hunger}\n{self.inventory}"
+
+    @pos.setter
+    def pos(self, value):
+        self.rect.x, self.rect.y = value
 
 
 if __name__ == "__main__":
