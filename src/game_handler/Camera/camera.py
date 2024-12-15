@@ -1,4 +1,3 @@
-# src/game_handler/Camera/camera.py
 import pygame
 
 class CameraGroup(pygame.sprite.Group):

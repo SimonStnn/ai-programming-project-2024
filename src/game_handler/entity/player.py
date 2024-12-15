@@ -83,6 +83,7 @@ class Player(Sprite):
 
     def update(self, delta: int | float):
         self.rect.move_ip(self.movement * delta * 250)
+        print(self.rect)
 
     def update_scale(self, resolution):
         #scale the player

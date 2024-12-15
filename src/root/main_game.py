@@ -6,6 +6,7 @@ from src.map import TILE_TRANSLATIONS
 from src.map.map import generate_empty_map, seed_map, get_map_chunk, Tile
 from src.game_handler.Camera import CameraGroup
 import threading
+from src.game_handler.entity.enemy import EnemyHandler
 
 class MainGame:
     player: Player
@@ -27,6 +28,7 @@ class MainGame:
         )
         self.visible_sprites.add(self.player)
         self.delta = 0
+        self.enemy_handler = EnemyHandler(self.player)
 
     def chunk_update(self):
         self.my_map = seed_map(
@@ -48,8 +50,8 @@ class MainGame:
             self.chunk_update()
 
         # dont thread if its active
-        if not threading.active_count() > 1:
-            threading.Thread(target=self.chunk_update, name="map").start()
+        if not threading.active_count() > 1: threading.Thread(target=self.chunk_update, name="map").start()
+        self.enemy_handler.update(self.delta)
 
     def update_scale(self, resolution):
         self.visible_sprites.update_scale(resolution)
@@ -65,6 +67,8 @@ class MainGame:
                     self.master.screen.blit(tile["sprite"], (x * 32 - self.visible_sprites.offset.x, y * 32 - self.visible_sprites.offset.y))
 
         self.visible_sprites.draw(self.master.screen)
+        self.enemy_handler.draw(self.master.screen, self.visible_sprites.offset)
+
 
     def post_draw_update(self): ...
 
