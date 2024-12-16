@@ -1,4 +1,4 @@
-import os, platform, sys
+import os, platform
 import locale
 
 if platform.system() == "Windows":
