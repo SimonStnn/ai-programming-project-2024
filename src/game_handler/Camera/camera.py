@@ -20,4 +20,4 @@ class CameraGroup(pygame.sprite.Group):
             if self.player is not sprite:
                 offset_pos = sprite.rect.topleft - self.offset
                 surface.blit(sprite.image, offset_pos)
-        surface.blit(self.player.image, (self.screen_width // 2, self.screen_height // 2))
+        surface.blit(self.player.image, (self.screen_width // 2 - self.player.rect.width // 2, self.screen_height // 2 - self.player.rect.height // 2))
